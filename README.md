@@ -16,7 +16,7 @@
 - **Thymeleaf** – Template engine per la parte frontend
 - **HTML5, CSS3, Bootstrap** – Interfaccia utente semplice e reattiva
 - **JPA / Hibernate** – Gestione della persistenza
-- **H2 Database** – Database in-memory per test e sviluppo
+- **PostGresSQL** – Database in-memory per test e sviluppo
 
 ## 🚀 Come eseguire il progetto
 
