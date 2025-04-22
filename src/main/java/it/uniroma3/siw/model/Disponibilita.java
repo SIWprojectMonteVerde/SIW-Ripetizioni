@@ -1,6 +1,7 @@
 package it.uniroma3.siw.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 @Entity
 public class Disponibilita {
 	@Id
@@ -17,7 +19,8 @@ public class Disponibilita {
 	private LocalDateTime fine;
 	@ManyToOne
 	private Annuncio annuncio;
-	
+	@OneToMany(mappedBy = "disponibilita")
+	private List<Prenotazione> prenotazioni;
 	
 	
 	public Long getId() {
@@ -45,6 +48,12 @@ public class Disponibilita {
 		this.annuncio = annuncio;
 	}
 	
+	public List<Prenotazione> getPrenotazioni() {
+		return prenotazioni;
+	}
+	public void setPrenotazioni(List<Prenotazione> prenotazioni) {
+		this.prenotazioni = prenotazioni;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(annuncio, inizio);
