@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import it.uniroma3.siw.model.Insegnante;
 
+
+
 public interface InsegnanteRepository extends CrudRepository<Insegnante, Long>{
-	
+	public Iterable<Insegnante> findByEmail(String email);
 }

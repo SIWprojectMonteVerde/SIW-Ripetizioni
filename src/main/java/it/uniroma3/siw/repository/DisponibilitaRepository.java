@@ -4,6 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import it.uniroma3.siw.model.Disponibilita;
 
-public interface DisponibilitaRepository extends CrudRepository<Disponibilita, Long>{
+import it.uniroma3.siw.model.Annuncio;
 
+
+public interface DisponibilitaRepository extends CrudRepository<Disponibilita, Long>{
+	public Iterable<Disponibilita> findByAnnuncio(Annuncio annuncio);
 }

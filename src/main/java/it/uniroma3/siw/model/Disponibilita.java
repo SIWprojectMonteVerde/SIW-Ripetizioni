@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,9 +22,7 @@ public class Disponibilita {
 	private LocalDateTime fine;
 	@ManyToOne
 	private Annuncio annuncio;
-	@OneToMany(mappedBy = "disponibilita")
-	private List<Prenotazione> prenotazioni;
-	
+	@OneToMany(mappedBy = "disponibilita", cascade = jakarta.persistence.CascadeType.REMOVE)
 	
 	public Long getId() {
 		return id;
