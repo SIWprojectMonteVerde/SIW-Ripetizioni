@@ -3,6 +3,9 @@ package it.uniroma3.siw.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +24,7 @@ public class Annuncio {
 	@ManyToOne
 	private Insegnante insegnante;
 	@OneToMany(mappedBy = "annuncio")
+	@Cascade(CascadeType.REMOVE)
 	private List<Disponibilita> disponibilita;
 	@ManyToOne
 	private Materia materia;
