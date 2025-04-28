@@ -22,10 +22,7 @@ public class Disponibilita {
 	private LocalDateTime fine;
 	@ManyToOne
 	private Annuncio annuncio;
-	@OneToMany(mappedBy = "disponibilita")
-	@Cascade(CascadeType.REMOVE)
-	private List<Prenotazione> prenotazioni;
-	
+	@OneToMany(mappedBy = "disponibilita", cascade = jakarta.persistence.CascadeType.REMOVE)
 	
 	public Long getId() {
 		return id;
