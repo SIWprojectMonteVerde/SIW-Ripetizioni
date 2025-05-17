@@ -1,8 +1,5 @@
 package it.uniroma3.siw.controller;
 
-
-public class AnnuncioController {
-
 import it.uniroma3.siw.model.Annuncio;
 import it.uniroma3.siw.service.AnnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class AnnuncioController {
+
+
     @Autowired
     private AnnuncioService annuncioService;
 
