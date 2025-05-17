@@ -17,7 +17,7 @@ public class Utente {
     private String cognome;
     private String email;
     @OneToMany(mappedBy = "utente")
-    private List<Prenotazione> Prenotazioni;
+    private List<Prenotazione> prenotazioni;
 
     public long getId() {
         return id;
@@ -52,11 +52,11 @@ public class Utente {
     }
 
     public List<Prenotazione> getPrenotazioni() {
-        return Prenotazioni;
+        return prenotazioni;
     }
 
     public void setPrenotazioni(List<Prenotazione> prenotazioni) {
-        Prenotazioni = prenotazioni;
+        this.prenotazioni = prenotazioni;
     }
 
     @Override
