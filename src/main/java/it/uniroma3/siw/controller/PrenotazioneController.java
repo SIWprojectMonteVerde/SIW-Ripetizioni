@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PrenotazioneController {
     @Autowired
     private PrenotazioneService prenotazioneService;
+
     @GetMapping("/")
     public String prenotazioniHome(Model model) {
         return "prenotazioniHome";
     }
+}
 
