@@ -35,7 +35,21 @@ public class AnnuncioController {
 
     @PostMapping("/annunci")
     public String aggiungiAnnuncio(@ModelAttribute("annuncio") Annuncio annuncio, BindingResult bindingResult) {
-
+        //TODO VALIDAZIONE
+        annuncioService.save(annuncio);
         return "redirect:annunci/"+annuncio.getId();
+    }
+
+    @GetMapping("/gestisciAnnunci")
+    public String getGestisciAnnunci(Model model) {
+        //TODO
+      return "gestisciAnnunci";
+    }
+    @GetMapping("iMieiAnnunci")
+    public String showAnnunciUtenye(Model model) {
+        //TODO trovare l'id utente tramite il prinicipal
+        Long id = 0L;
+        model.addAttribute("annunci", annuncioService.findByInsegnante(id));
+        return "iMieiAnnunci";
     }
 }

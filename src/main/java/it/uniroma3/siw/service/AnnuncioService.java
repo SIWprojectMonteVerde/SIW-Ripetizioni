@@ -20,4 +20,7 @@ public class AnnuncioService {
     public Annuncio findById(Long id) {
         return annuncioRepository.findById(id).orElse(null);
     }
+    public Iterable<Annuncio> findByInsegnante(Long id) {
+        return annuncioRepository.findByInsegnante_Id(id);
+    }
 }
