@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface AnnuncioRepository extends CrudRepository<Annuncio, Long> {
 	public Iterable<Annuncio> findByMateria(Materia materia);
-	public Iterable<Annuncio> findByInsegnante(Insegnante insegnante);
+
+	public  Iterable<Annuncio> findByInsegnante_Id(Long id);
 
 }

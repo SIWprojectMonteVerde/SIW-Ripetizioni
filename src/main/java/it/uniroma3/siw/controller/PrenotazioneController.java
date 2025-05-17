@@ -1,5 +1,6 @@
 package it.uniroma3.siw.controller;
 
+
 import it.uniroma3.siw.service.PrenotazioneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -17,4 +18,3 @@ public class PrenotazioneController {
         return "prenotazioniHome";
     }
 
-}
