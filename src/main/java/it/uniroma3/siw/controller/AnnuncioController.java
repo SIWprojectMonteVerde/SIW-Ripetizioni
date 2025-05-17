@@ -1,5 +1,8 @@
 package it.uniroma3.siw.controller;
 
+
+public class AnnuncioController {
+
 import it.uniroma3.siw.model.Annuncio;
 import it.uniroma3.siw.service.AnnuncioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +55,5 @@ public class AnnuncioController {
         model.addAttribute("annunci", annuncioService.findByInsegnante(id));
         return "iMieiAnnunci";
     }
+
 }
