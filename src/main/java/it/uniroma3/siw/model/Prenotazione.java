@@ -12,7 +12,7 @@ public class Prenotazione {
     private LocalDateTime Inizio;
     private LocalDateTime Fine;
     @ManyToOne
-    private Utente utente;
+    private Studente studente;
     @ManyToOne
     private Disponibilita disponibilita;
 
@@ -40,12 +40,12 @@ public class Prenotazione {
         Fine = fine;
     }
 
-    public Utente getUtente() {
-        return utente;
+    public Studente getUtente() {
+        return studente;
     }
 
-    public void setUtente(Utente utente) {
-        this.utente = utente;
+    public void setUtente(Studente studente) {
+        this.studente = studente;
     }
 
     public Disponibilita getDisponibilita() {
