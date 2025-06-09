@@ -3,6 +3,8 @@ package it.uniroma3.siw.model;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -18,8 +20,11 @@ public class Annuncio {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@NotEmpty
 	private String titolo;
+	@NotEmpty
 	private String descrizione;
+	@NotNull
 	private Float prezzoOrario;
 	@ManyToOne
 	private Insegnante insegnante;
