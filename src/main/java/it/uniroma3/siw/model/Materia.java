@@ -13,7 +13,7 @@ public class Materia {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String nome;
-	private String descrzione;
+	private String descrizione;
 	public Long getId() {
 		return id;
 	}
@@ -26,26 +26,24 @@ public class Materia {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public String getDescrzione() {
-		return descrzione;
+	public String getDescrizione() {
+		return descrizione;
 	}
-	public void setDescrzione(String descrzione) {
-		this.descrzione = descrzione;
+	public void setDescrizione(String descrzione) {
+		this.descrizione = descrzione;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		Materia materia = (Materia) o;
+		return Objects.equals(nome, materia.nome);
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(nome);
+		return Objects.hashCode(nome);
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Materia other = (Materia) obj;
-		return Objects.equals(nome, other.nome);
-	}
-	
 }
+	
+
