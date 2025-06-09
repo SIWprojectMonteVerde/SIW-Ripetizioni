@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div th:fragment="formAnnuncio(btnText,action)" class="container">
+  <form id="formAnnuncio" th:action="@{'/teacher/'+${action}}" th:object="${annuncio}" method="post">
+    <input type="hidden" th:field="*{id}" />
+    <div class="mb-3">
+      <label for="titleInput" class="form-label">Titolo</label>
+      <input type="text" id="titleInput" name="titolo" class="form-control" th:field="*{titolo}" required>
+    </div>
+    <div class="mb-3">
+      <label for="descriptionInput" class="form-label">Descrizione</label>
+      <textarea id="descriptionInput" name="descrizione" class="form-control" rows="3" th:field="*{descrizione}" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="materiaSelect" class="form-label">Materia</label>
+      <select id="materiaSelect" name="materia" class="form-select" th:field="*{materia}" required>
+        <option value="">Seleziona una materia</option>
+        <option th:each="materia : ${materie}" th:value="${materia.id}" th:text="${materia.nome}"></option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="priceInput">Prezzo orario</label>
+      <input type="number" id="priceInput" class="form-control" th:field="*{prezzoOrario}" required>
+    </div>
+    <button type="submit" class="btn btn-primary" th:text="${btnText}">Bottone</button>
+  </form>
+</div>
+</body>
+</html>
