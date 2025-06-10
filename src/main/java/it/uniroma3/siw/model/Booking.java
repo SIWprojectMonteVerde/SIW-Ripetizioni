@@ -5,16 +5,16 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-public class Prenotazione {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private LocalDateTime Inizio;
-    private LocalDateTime Fine;
+    private LocalDateTime Fine; //TODO VALUTARE SE EFFFETIVAMENTE UTILI
     @ManyToOne
-    private Studente studente;
+    private Student student;
     @ManyToOne
-    private Disponibilita disponibilita;
+    private Availability availability;
 
     public long getId() {
         return id;
@@ -40,20 +40,20 @@ public class Prenotazione {
         Fine = fine;
     }
 
-    public Studente getUtente() {
-        return studente;
+    public Student getUtente() {
+        return student;
     }
 
-    public void setUtente(Studente studente) {
-        this.studente = studente;
+    public void setUtente(Student student) {
+        this.student = student;
     }
 
-    public Disponibilita getDisponibilita() {
-        return disponibilita;
+    public Availability getDisponibilita() {
+        return availability;
     }
 
-    public void setDisponibilita(Disponibilita disponibilita) {
-        this.disponibilita = disponibilita;
+    public void setDisponibilita(Availability availability) {
+        this.availability = availability;
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Prenotazione {
         int result = 1;
         result = prime * result + ((Inizio == null) ? 0 : Inizio.hashCode());
         result = prime * result + ((Fine == null) ? 0 : Fine.hashCode());
-        result = prime * result + ((disponibilita == null) ? 0 : disponibilita.hashCode());
+        result = prime * result + ((availability == null) ? 0 : availability.hashCode());
         return result;
     }
 
@@ -74,7 +74,7 @@ public class Prenotazione {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Prenotazione other = (Prenotazione) obj;
+        Booking other = (Booking) obj;
         if (Inizio == null) {
             if (other.Inizio != null)
                 return false;
@@ -85,10 +85,10 @@ public class Prenotazione {
                 return false;
         } else if (!Fine.equals(other.Fine))
             return false;
-        if (disponibilita == null) {
-            if (other.disponibilita != null)
+        if (availability == null) {
+            if (other.availability != null)
                 return false;
-        } else if (!disponibilita.equals(other.disponibilita))
+        } else if (!availability.equals(other.availability))
             return false;
         return true;
     }

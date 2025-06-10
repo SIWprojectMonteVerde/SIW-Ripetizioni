@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Annuncio</title>
+</head>
+<body>
+<div>
+    <h3 th:text="*{listing.titolo}">Titolo</h3>
+    <h4 th:text="*{listing.subject.nome}" >Materia</h4>
+    <h5 th:text="*{listing.prezzoOrario +' $/h'}"></h5>
+    <p th:text="*{listing.descrizione}">Descrizione</p>
+</div>
+</body>
+</html>

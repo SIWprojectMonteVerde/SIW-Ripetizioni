@@ -8,23 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Materia {
+public class Subject {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private String nome;
-	private String descrizione;
+	private String name;
+	private String descrizione;//TODO VALUTARE SE SERVE VERAMENTE
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String nome) {
+		this.name = nome;
 	}
 	public String getDescrizione() {
 		return descrizione;
@@ -36,13 +36,13 @@ public class Materia {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
-		Materia materia = (Materia) o;
-		return Objects.equals(nome, materia.nome);
+		Subject subject = (Subject) o;
+		return Objects.equals(name, subject.name);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(nome);
+		return Objects.hashCode(name);
 	}
 }
 	

@@ -24,8 +24,12 @@ public class Credentials {
     private String username;
     private String password;
     private String role;
-    @OneToOne(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
-    private Utente user;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Student student;
+
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Teacher teacher;
 
     public Long getId() {
         return id;
@@ -59,12 +63,36 @@ public class Credentials {
         this.role = role;
     }
 
-    public Utente getUser() {
-        return user;
+    public User getUser() {
+        if (student == null) {
+            return teacher;
+        }
+        return student;
     }
 
-    public void setUser(Utente user) {
-        this.user = user;
+    public void setUser(User user) {
+        if (user instanceof Student) {
+            this.student = (Student) user;
+            this.teacher = null;
+        } else if (user instanceof Teacher) {
+            this.teacher = (Teacher) user;
+            this.student = null;
+        }
+    }
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     @Override

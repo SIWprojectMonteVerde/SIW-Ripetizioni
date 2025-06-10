@@ -4,6 +4,7 @@ package it.uniroma3.siw.service;
 
 
 import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.Student;
 import it.uniroma3.siw.repository.CredentialsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,12 @@ public class CredentialsService {
         return credentialsRepository.findByUsername(username).orElse(null);
     }
     public Credentials saveCredentials(Credentials credentials) {
-        credentials.setRole(Credentials.STUDENT_ROLE);
+        if(credentials.getUser().getClass().equals(Student.class)) {
+            credentials.setRole(Credentials.STUDENT_ROLE);
+        }else{
+            credentials.setRole(Credentials.TEACHER_ROLE);
+        }
+
         credentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
         return credentialsRepository.save(credentials);
     }
