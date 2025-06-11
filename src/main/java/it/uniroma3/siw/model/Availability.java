@@ -21,7 +21,7 @@ public class Availability {
 	private Listing listing;
 
 	@OneToMany(mappedBy = "availability", cascade = jakarta.persistence.CascadeType.REMOVE)
-	private List<Booking> listings;
+	private List<Booking> bookings;
 
 
 	public Long getId() {
@@ -55,12 +55,14 @@ public class Availability {
 		this.listing = listing;
 	}
 
-	public List<Booking> getListings() {
-		return listings;
+	public List<Booking> getBookings() {
+		return bookings;
 	}
-	public void setListings(List<Booking> prenotazioni) {
-		this.listings = prenotazioni;
+
+	public void setBookings(List<Booking> bookings) {
+		this.bookings = bookings;
 	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(listing, startTime);
