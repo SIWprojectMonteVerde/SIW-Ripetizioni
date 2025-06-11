@@ -23,4 +23,13 @@ public class ListingService {
     public Iterable<Listing> findByTeacher(Long id) {
         return listingRepository.findByTeacher_Id(id);
     }
+    public Listing update(Listing listing) {
+        Listing original = findById(listing.getId());
+
+        original.setTitle(listing.getTitle());
+        original.setDescription(listing.getDescription());
+        original.setHourlyRate(listing.getHourlyRate());
+        original.setAvailability(listing.getAvailability());
+        return listingRepository.save(original);
+    }
 }

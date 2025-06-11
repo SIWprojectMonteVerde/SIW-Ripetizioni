@@ -1,19 +1,12 @@
 package it.uniroma3.siw.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Listing {
@@ -28,9 +21,8 @@ public class Listing {
 	private Float hourlyRate;
 	@ManyToOne
 	private Teacher teacher;
-	@OneToMany(mappedBy = "listing")
-	@Cascade(CascadeType.REMOVE)
-	private List<Availability> availability;
+	@OneToMany(mappedBy = "listing",cascade = CascadeType.PERSIST)
+	private List<Availability> availability = new ArrayList<>();
 	@ManyToOne
 	private Subject subject;
 
@@ -73,7 +65,10 @@ public class Listing {
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
 	}
-
+	public void addAvailability(Availability availability){
+		this.availability.add(availability);
+		availability.setListing(this);
+	}
 	public List<Availability> getAvailability() {
 		return availability;
 	}
