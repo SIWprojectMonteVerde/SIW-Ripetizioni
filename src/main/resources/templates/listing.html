@@ -6,10 +6,13 @@
 </head>
 <body>
 <div>
-    <h3 th:text="*{listing.titolo}">Titolo</h3>
-    <h4 th:text="*{listing.subject.nome}" >Materia</h4>
-    <h5 th:text="*{listing.prezzoOrario +' $/h'}"></h5>
-    <p th:text="*{listing.descrizione}">Descrizione</p>
+    <h3 th:text="*{listing.title}">Titolo</h3>
+    <h4 th:text="*{listing.subject.name}" >Materia</h4>
+    <h5 th:text="*{listing.hourlyRate +' $/h'}"></h5>
+    <p th:text="*{listing.description}">Descrizione</p>
+    <div th:each="availabilty: ${listing.getAvailability()}">
+        <h2 th:text="${availabilty.startTime}"></h2>
+    </div>
 </div>
 </body>
 </html>

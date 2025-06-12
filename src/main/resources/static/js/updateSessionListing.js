@@ -1,16 +1,18 @@
-function addAvailability() {
-    updateSessionAndRedirect('/teacher/formNewListing/addAvailability');
+function addAvailability(element) {
+    const action = element.getAttribute('data-action');
+    updateSessionAndRedirect('/teacher/'+action+'/addAvailability');
 }
 
-function removeAvailability(index) {
-    updateSessionAndRedirect('/teacher/formNewListing/removeAvailability/' + index);
+function removeAvailability(element,index) {
+    const action = element.getAttribute('data-action');
+    updateSessionAndRedirect('/teacher/'+action+'/removeAvailability/' + index);
 }
 
 function updateSessionAndRedirect(url) {
     const form = document.getElementById('formAnnuncio');
     const formData = new FormData(form);
 
-    // RIMUOVI il campo availability problematico dal FormData
+
     formData.delete('availability');
 
     // Aggiorna la sessione

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>SIW Ripetizioni</title>
+  <link rel="stylesheet" href="/annunci.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="logo">SIW Ripetizioni</div>
+    <div class="links">
+      <a href="/login">Login</a>
+      <a href="/register">Registrati</a>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="search">
+    <h1>Cerca Lezioni</h1>
+    <form th:action="@{/}" method="get">
+      <input type="text" name="query" placeholder="Cerca per subject o teacher">
+      <button type="submit">Cerca</button>
+    </form>
+  </section>
+
+  <section class="annunci">
+    <h2>Annunci disponibili</h2>
+    <div class="card-grid">
+      <div class="card" th:each="listing : ${listings}">
+        <div class="avatar">
+          <img src="/images/avatar-placeholder.png" alt="Avatar">
+        </div>
+        <div class="info">
+          <h3 th:text="'Prof. ' + ${listing.teacher.cognome}"></h3>
+          <p th:text="${listing.subject.nome} + ' - ' + ${listing.livelloScolastico}"></p>
+          <p th:text="${listing.modalita} + ' - ' + ${listing.prezzoOrario} + ' €/h'"></p>
+          <p th:text="'Disponibilità: ' + ${#lists.isEmpty(listing.availability) ? '---' : listing.availability[0].giorno + ' ' + listing.availability[0].oraInizio + '-' + listing.availability[0].oraFine}"></p>
+          <a class="btn" th:href="@{'/prenota/' + ${listing.id}}">Prenota</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2025 SIW Ripetizioni - Tutti i diritti riservati</p>
+</footer>
+
+</body>
+</html>

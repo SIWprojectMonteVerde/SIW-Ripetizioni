@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>I miei annunci</title>
+</head>
+<body>
+<div th:each="listing:${listings}">
+    <div>
+        <h2 th:text="${listing.title}"></h2>
+        <a th:href="@{'/teacher/formUpdateListing/'+${listing.id} }">Modifica</a>
+    </div>
+
+</div>
+</body>
+</html>

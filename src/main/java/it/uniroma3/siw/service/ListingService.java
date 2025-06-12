@@ -20,6 +20,9 @@ public class ListingService {
     public Listing findById(Long id) {
         return listingRepository.findById(id).orElse(null);
     }
+    public Listing findByIdWithAvailability(Long id) {
+        return listingRepository.findByIdWithAvailability(id).orElse(null);
+    }
     public Iterable<Listing> findByTeacher(Long id) {
         return listingRepository.findByTeacher_Id(id);
     }
@@ -29,6 +32,8 @@ public class ListingService {
         original.setTitle(listing.getTitle());
         original.setDescription(listing.getDescription());
         original.setHourlyRate(listing.getHourlyRate());
+        original.setAvailability(listing.getAvailability());
+        original.setSubject(listing.getSubject());
         original.setAvailability(listing.getAvailability());
         return listingRepository.save(original);
     }

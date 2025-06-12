@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<form th:action="@{/teacher/formNewListing/addAvailability}" method="post" th:object="${availability}">
+<form th:action="@{''}" th:object="${availability}" method="post"> <!--Lascio vuoto action cosi corrisponde all'url corrente(semplifica la distinizione tra newListing e updateListing)--->
 
     <label for ="starTime">Inizio</label>
     <input id="starTime" th:field="${availability.startTime}" type="datetime-local">
