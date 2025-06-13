@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
-import static it.uniroma3.siw.model.Credentials.TEACHER_ROLE;
+import static it.uniroma3.siw.model.Credentials.*;
 
 @Configuration
 @EnableWebSecurity
@@ -53,6 +52,8 @@ public class AuthConfiguration {
                         .requestMatchers(HttpMethod.POST, "/register/**", "/login").permitAll()//TODO MODIFICARE
                         .requestMatchers(HttpMethod.GET, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
                         .requestMatchers(HttpMethod.POST, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority(STUDENT_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/student/**").hasAnyAuthority(STUDENT_ROLE)
                         .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                         // tutti gli utenti autenticati possono accere alle pagine rimanenti
