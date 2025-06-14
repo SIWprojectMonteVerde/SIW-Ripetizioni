@@ -3,15 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Annuncio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/navbar.css">
 </head>
 <body>
-<div>
-    <h3 th:text="*{listing.title}">Titolo</h3>
-    <h4 th:text="*{listing.subject.name}" >Materia</h4>
-    <h5 th:text="*{listing.hourlyRate +' $/h'}"></h5>
+<div th:replace="fragments/navbarFragments :: navbarFragment(searchField=false,searchItem='',searchMsg='')"></div>
+<div class="container pt-nav-bar">
+    <h2 th:text="*{listing.title}">Titolo</h2>
+    <small th:text="*{listing.subject.name}" >Materia</small>
     <p th:text="*{listing.description}">Descrizione</p>
-    <div th:each="availabilty: ${listing.getAvailability()}">
-        <h2 th:text="${availabilty.startTime}"></h2>
+
+    <h5 th:text=" *{'Prezzo: '+listing.hourlyRate +' €/h'}"></h5>
+    <h3>Disponibilità</h3>
+    <div class="card mb-2 h-100" th:each="availabilty: ${availabilities}">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${#temporals.format(availabilty.date, 'EEEE dd MMM yyyy')}">Giorno</h5>
+            <p class="card-text" th:text="${#temporals.format(availabilty.startTime, 'HH:mm')+'-'+#temporals.format(availabilty.endTime, 'HH:mm')}"></p>
+            <a class="btn btn-success" th:href="@{'/student/newBooking/'+${availabilty.id}}">Prenota</a>
+        </div>
+
+
     </div>
 </div>
 </body>
