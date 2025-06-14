@@ -9,9 +9,12 @@
 </head>
 
 <body>
-<div th:fragment="formAnnuncio(btnText,action,section)" class="container">
+<div th:fragment="formAnnuncio(btnText,action)" class="container">
   <form id="formAnnuncio" th:action="@{'/teacher/'+${action}}" th:object="${listing}" method="post">
-    <input type="hidden" th:field="*{id}" />
+    <input type="hidden" th:field="*{id}"/>
+
+    <!-- Campi esistenti del form -->
+
     <div class="mb-3">
       <label for="titleInput" class="form-label">Titolo</label>
       <input type="text" id="titleInput" name="titolo" class="form-control" th:field="*{title}" required>
@@ -33,49 +36,183 @@
       <input type="number" id="priceInput" class="form-control" th:field="*{hourlyRate}" required>
     </div>
 
-
   </form>
+
   <div class="row mt-3 align-items-center">
     <div class="col">
-      <h2> Disponibiltà</h2>
+      <h2>Disponibilità</h2>
     </div>
-    <div class="col text-end">
-      <a id="addAnnuncioBtn" class="btn btn-success" href="#" th:data-action="${section}" onclick="addAvailability(this) ">
+    <div class="col mb-3 text-end">
+      <a id="addAnnuncioBtn" class="btn btn-success" href="#"
+         th:data-listing-id="${listing.id}" th:data-action="${action}" onclick="addAvailability(this)">
         <i class="bi bi-plus-circle-fill"></i>
       </a>
     </div>
 
   </div>
+  <div th:if="${removeError}" class="col alert alert-danger">
+    <span th:text="${removeError}"></span>
+  </div>
+  <div class="text-danger" th:errors="${listing}"></div>
   <div class="overflow-x-auto py-3">
     <div class="d-flex gap-3" style="width: max-content;">
-      <div th:each="availability,iterStat : ${listing.getAvailability()}" class="flex-shrink-0">
-        <!--OTTENGO INDICI DELLA LISTA PER LA RIMOZIONE-->
+
+      <!-- Card esistenti da Thymeleaf -->
+      <div th:each="availability,iterStat : ${listing.getAvailabilities()}" class="flex-shrink-0"
+           th:attr="data-existing-index=${iterStat.index}">
         <div class="card h-100 position-relative">
           <div class="card-body">
-            <a class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
+            <div class="text-danger mt-1"
+                 th:if="${#fields.hasErrors('listing.availabilities[' + iterStat.index + ']')}"
+                 th:errors="*{listing.availabilities[__${iterStat.index}__]}"></div>
+            <a th:if="${action}=='addListing'" class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
                style="top: -7px; right: -7px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;"
-               href="#"  th:data-action="${section}" th:onclick="|removeAvailability(this,${iterStat.index})|" >
-              <!---INCLUDO L'INDICE NELL REF-->
+               onclick="removeNewAvailability(this)" >
               <i class="bi bi-x-lg text-white" style="font-size: 12px;"></i>
-            </a>
-            <h5 class="card-title" th:text="${#temporals.format(availability.startTime, 'EEEE')}">Giorno</h5>
-            <p class="card-text"
-               th:text="${#temporals.format(availability.startTime, 'HH:mm')} + ' - ' + ${#temporals.format(availability.endTime, 'HH:mm')}">
-              Orario</p>
+            </a><!--Tasto per form new-->
+            <button type="button"
+                    class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
+                    style="top: -7px; right: -7px; width: 24px; height: 24px;
+               display: flex; align-items: center; justify-content: center;"
+                    title="Rimuovi disponibilità"
+                    th:onclick="'submitFormAnnuncioConRimozione(' + ${availability.id} + ',' + ${listing.id} + ')'">
+              <i class="bi bi-x-lg text-white" style="font-size:12px"></i>
+            </button>
+
+           <!--Tasto per form di update (Uso form perchè devo fare post)-->
+            <a th:if="${action == 'updateListing' and availability.id == null}" class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
+               style="top: -7px; right: -7px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;"
+               onclick="removeNewAvailability(this)" >
+              <i class="bi bi-x-lg text-white" style="font-size: 12px;"></i>
+            </a><!--Tasto per formUpdate per disponibilta temporanee-->
+
+
+
+
+            <!-- Campi nascosti per le availability esistenti -->
+            <input type="hidden" th:name="'availabilities[' + ${iterStat.index} + '].id'"
+                   th:value="${availability.id}" form="formAnnuncio">
+            <input type="hidden" class="form-control form-control-sm"
+                   th:name="'availabilities[' + ${iterStat.index} + '].listing'"
+                   th:value="${listing.id}"
+                   form="formAnnuncio">
+            <div class="mb-2">
+              <label class="form-label">Giorno</label>
+              <input type="date" class="form-control form-control-sm"
+                     th:name="'availabilities[' + ${iterStat.index} + '].date'"
+                     th:value="${availability.date}"
+                     form="formAnnuncio">
+              <div class="text-danger mt-1"
+                   th:if="${#fields.hasErrors('listing.availabilities[' + iterStat.index + '].date')}"
+                   th:errors="*{listing.availabilities[__${iterStat.index}__].date}"></div>
+            </div>
+            <div class="mb-2">
+              <div class="mb-2">
+                <label class="form-label">Ora inizio</label>
+                <input type="time" class="form-control form-control-sm"
+                       th:name="'availabilities[' + ${iterStat.index} + '].startTime'"
+                       th:value="${availability.startTime}"
+                       form="formAnnuncio">
+                <div class="text-danger mt-1"
+                     th:if="${#fields.hasErrors('listing.availabilities[' + iterStat.index + '].startTime')}"
+                     th:errors="*{listing.availabilities[__${iterStat.index}__].startTime}"></div>
+              </div>
+            <div class="mb-2">
+              <label class="form-label">Ora fine</label>
+              <input type="time" class="form-control form-control-sm"
+                     th:name="'availabilities[' + ${iterStat.index} + '].endTime'"
+                     th:value="${availability.endTime}"
+                     form="formAnnuncio">
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <div>
     <button form="formAnnuncio" type="submit" class="btn btn-primary">
-      <span th:text="${btnText}">Bottone Salvataggio <i class="bi bi-floppy me-2"></i></span>
+      <span th:text="${btnText}">Bottone Salvataggio</span>
+      <i class="bi bi-floppy ms-2"></i>
     </button>
   </div>
+  </div>
+  <script>
+    let availabilityIndex = 0;
 
+    function addAvailability(button) {
+      const displayContainer = document.querySelector('.d-flex.gap-3');
+      const existingCount = document.querySelectorAll('[data-existing-index]').length;
+      const currentIndex = existingCount + availabilityIndex;
+
+      const newAvailability = document.createElement('div');
+      newAvailability.className = 'flex-shrink-0';
+      newAvailability.setAttribute('data-new-index', currentIndex);
+      newAvailability.setAttribute('data-from-js', 'true'); // Marker importante!
+      newAvailability.innerHTML = `
+        <div class="card h-100 position-relative">
+            <div class="card-body">
+                <a class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
+                   style="top: -7px; right: -7px; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;"
+                   href="#" onclick="removeNewAvailability(this)">
+                    <i class="bi bi-x-lg text-white" style="font-size: 12px;"></i>
+                </a>
+                <div class="mb-2">
+                    <label class="form-label">Giorno</label>
+                    <input type="date" class="form-control form-control-sm"
+                           name="availabilities[${currentIndex}].date"
+                           form="formAnnuncio"
+                           required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Ora inizio</label>
+                    <input type="time" class="form-control form-control-sm"
+                           name="availabilities[${currentIndex}].startTime"
+                           form="formAnnuncio"
+                           required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Ora fine</label>
+                    <input type="time" class="form-control form-control-sm"
+                           name="availabilities[${currentIndex}].endTime"
+                           form="formAnnuncio"
+                           required>
+                </div>
+            </div>
+        </div>
+      `;
+
+      displayContainer.appendChild(newAvailability);
+      availabilityIndex++;
+    }
+
+    function removeNewAvailability(button) {
+      const card = button.closest('.flex-shrink-0');
+      card.remove();
+      reindexAvailabilities();//NECESSARIO PER EVITARE UN BUG CHE NON PERMETTEVA LA CORRETTA ELIMINAZIONE DELLE DISPONIBILTA' UNA VOLTA CHE LA PAGINA VENIVA RICARICATA IN SEGUITO AD UN ERRORE
+    }
+    function reindexAvailabilities() {
+      document.querySelectorAll('.flex-shrink-0').forEach((card, i) => {
+        card.querySelectorAll('[name]').forEach(el => {
+          el.name = el.name.replace(/availabilities\[\d+\]/, `availabilities[${i}]`);
+        });
+      });
+    }
+    function submitFormAnnuncioConRimozione(aid, lid) {
+      const form = document.getElementById("formAnnuncio");
+
+      // Sovrascrive dinamicamente l'action
+      form.action = `/teacher/removeAvailabilityFromListing/${aid}/${lid}`;
+
+      // Submit
+      form.submit();
+    }
+
+
+
+
+  </script>
 </div>
 
-
 </body>
-
 </html>

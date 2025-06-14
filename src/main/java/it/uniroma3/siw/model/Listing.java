@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,8 +22,10 @@ public class Listing {
 	private Float hourlyRate;
 	@ManyToOne
 	private Teacher teacher;
-	@OneToMany(mappedBy = "listing",cascade = CascadeType.PERSIST)
-	private List<Availability> availability = new ArrayList<>();
+
+	@Valid //PER FAR SI CHE VENGA VALIDATO OGNI SINGOLO ELEMENTO DELLA LISTA
+	@OneToMany(mappedBy = "listing",cascade = {CascadeType.ALL})
+	private List<Availability> availabilities = new ArrayList<>();
 	@ManyToOne
 	private Subject subject;
 
@@ -66,15 +69,15 @@ public class Listing {
 		this.teacher = teacher;
 	}
 	public void addAvailability(Availability availability){
-		this.availability.add(availability);
+		this.availabilities.add(availability);
 		availability.setListing(this);
 	}
-	public List<Availability> getAvailability() {
-		return availability;
+	public List<Availability> getAvailabilities() {
+		return availabilities;
 	}
 
-	public void setAvailability(List<Availability> availability) {
-		this.availability = availability;
+	public void setAvailabilities(List<Availability> availability) {
+		this.availabilities = availability;
 	}
 
 	public Subject getSubject() {

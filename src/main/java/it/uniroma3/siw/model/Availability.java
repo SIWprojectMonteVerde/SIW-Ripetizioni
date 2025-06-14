@@ -1,26 +1,32 @@
 package it.uniroma3.siw.model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 @Entity
 public class Availability {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	private LocalDateTime startTime;
-	private LocalDateTime endTime;
+	@FutureOrPresent
+	private LocalDate date;
+	@NotNull
+	private LocalTime startTime;
+	@NotNull
+
+	private LocalTime endTime;
 	@ManyToOne
 	private Listing listing;
 
-	@OneToMany(mappedBy = "availability", cascade = jakarta.persistence.CascadeType.REMOVE)
+	@OneToMany(mappedBy = "availability", cascade = {CascadeType.ALL})
 	private List<Booking> bookings;
 
 
@@ -35,19 +41,27 @@ public class Availability {
 		return listing;
 	}
 
-	public LocalDateTime getStartTime() {
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public LocalTime getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(LocalDateTime startTime) {
+	public void setStartTime(LocalTime startTime) {
 		this.startTime = startTime;
 	}
 
-	public LocalDateTime getEndTime() {
+	public LocalTime getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(LocalDateTime endTime) {
+	public void setEndTime(LocalTime endTime) {
 		this.endTime = endTime;
 	}
 
@@ -78,7 +92,7 @@ public class Availability {
 		Availability other = (Availability) obj;
 		return Objects.equals(listing, other.listing) && Objects.equals(startTime, other.startTime);
 	}
-	
-	
-	
+
+
+
 }

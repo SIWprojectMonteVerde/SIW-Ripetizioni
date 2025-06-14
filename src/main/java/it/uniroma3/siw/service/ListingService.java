@@ -1,5 +1,6 @@
 package it.uniroma3.siw.service;
 
+import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Listing;
 import it.uniroma3.siw.repository.ListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,9 @@ public class ListingService {
     public Iterable<Listing> findAll() {
         return listingRepository.findAll();
     }
+    public Iterable<Listing> findAllWithAvailabilities() {
+        return listingRepository.findAllWithAvailabilities();
+    }
     public Listing save(Listing listing) {
         return listingRepository.save(listing);
     }
@@ -27,14 +31,18 @@ public class ListingService {
         return listingRepository.findByTeacher_Id(id);
     }
     public Listing update(Listing listing) {
-        Listing original = findById(listing.getId());
-
-        original.setTitle(listing.getTitle());
-        original.setDescription(listing.getDescription());
-        original.setHourlyRate(listing.getHourlyRate());
-        original.setAvailability(listing.getAvailability());
-        original.setSubject(listing.getSubject());
-        original.setAvailability(listing.getAvailability());
-        return listingRepository.save(original);
+        Listing existing = findById(listing.getId());
+        listing.getAvailabilities().forEach(availability -> {if (availability.getId()==null){
+            availability.setListing(listing);
+        }}); //configuro corettamente le nuove disponibilità
+        existing.setAvailabilities(listing.getAvailabilities());
+        existing.setTitle(listing.getTitle());
+        existing.setDescription(listing.getDescription());
+        existing.setHourlyRate(listing.getHourlyRate());
+        return listingRepository.save(existing);
     }
+    public void removeAvailabilityFromListing(Long availabilityId, Long listingId) {
+         listingRepository.removeAvailabilityFromListing(availabilityId, listingId);
+    }
+
 }
