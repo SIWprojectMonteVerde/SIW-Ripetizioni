@@ -27,4 +27,7 @@ public class BookingService {
     public Iterable<Booking> findByUser(Student student) {
         return bookingRepository.findByStudent(student);
     }
+    public boolean listingHasActiveBookings(Long listingId){
+        return bookingRepository.listingHasActiveBookings(listingId);
+    }
 }

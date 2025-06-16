@@ -4,10 +4,7 @@ import it.uniroma3.siw.controller.validator.AvailabilityListValidator;
 import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Listing;
 import it.uniroma3.siw.model.Teacher;
-import it.uniroma3.siw.service.AvaialabiltyService;
-import it.uniroma3.siw.service.ListingService;
-import it.uniroma3.siw.service.SubjectService;
-import it.uniroma3.siw.service.UserService;
+import it.uniroma3.siw.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +31,8 @@ public class ListingController {
     private UserService userService;
     @Autowired
     private AvaialabiltyService availabilityService;
+    @Autowired
+    private BookingService bookingService;
 
     @Autowired
     private AvailabilityListValidator availabilityListValidator;
@@ -134,9 +134,26 @@ public class ListingController {
         return "teacher/formUpdateListing";
     }
 
+    //RIMOZIONE ANNUNCI
+    @GetMapping("/teacher/removeListing/{id}")
+    public String removeListing(@PathVariable("id") Long id, RedirectAttributes redirectAttributes, Model model) {
+        Listing temporaryListing = listingService.findByIdWithAvailability(id);
+        if(!temporaryListing.getTeacher().getId().equals(userService.getCurrentUser().getId())) {
+            return "redirect:/teacher/myListings";
+        }
+        if(bookingService.listingHasActiveBookings(id)){
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Non è possibile eliminare un annuncio che ha prenotazioni attive"); //Uso RredirectAttributes cosi il messaggio non si perde nel redirect
+        }else {
+            listingService.removeListing(id);
+            redirectAttributes.addFlashAttribute("successMessage",
+                    "Annuncio eliminato con successo"); //Uso RredirectAttributes cosi il messaggio non si perde nel redirect
+        }
 
+        return "redirect:/teacher/myListings";
+    }
 
-
+    //UTILITIES
     private void copyTemporaryListing(Listing temporaryListing, Listing listing) {
         List<Availability> newAvailabilities = temporaryListing.getAvailabilities().stream()
                 .filter(a -> a.getId() == null).toList();
