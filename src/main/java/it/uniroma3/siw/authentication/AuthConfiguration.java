@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
+import static it.uniroma3.siw.model.Credentials.*;
 
 @Configuration
 @EnableWebSecurity
@@ -47,9 +47,13 @@ public class AuthConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         // .requestMatchers("/**").permitAll()
                         // chiunque (autenticato o no) può accedere alle pagine index, login, register, ai css e alle immagini
-                        .requestMatchers(HttpMethod.GET, "/annunci/**", "/**", "/index", "/register", "/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/listings/**", "/index", "/index", "/register/**", "/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
                         // chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register
-                        .requestMatchers(HttpMethod.POST, "/**", "/register", "/login").permitAll() //TODO MODIFICARE
+                        .requestMatchers(HttpMethod.POST, "/register/**", "/login").permitAll()//TODO MODIFICARE
+                        .requestMatchers(HttpMethod.GET, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
+                        .requestMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority(STUDENT_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/student/**").hasAnyAuthority(STUDENT_ROLE)
                         .requestMatchers(HttpMethod.GET, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                         .requestMatchers(HttpMethod.POST, "/admin/**").hasAnyAuthority(ADMIN_ROLE)
                         // tutti gli utenti autenticati possono accere alle pagine rimanenti

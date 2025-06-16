@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{''}" th:object="${availability}" method="post"> <!--Lascio vuoto action cosi corrisponde all'url corrente(semplifica la distinizione tra newListing e updateListing)--->
+
+    <label for ="starTime">Inizio</label>
+    <input id="starTime" th:field="${availability.startTime}" type="datetime-local">
+    <label for="endTime">Fine:</label>
+    <input id="endTime" th:field="${availability.endTime}" type="datetime-local">
+  <button type="submit"> Aggiungi</button>
+</form>
+</body>
+</html>

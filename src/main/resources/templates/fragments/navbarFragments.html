@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+<nav th:fragment="navbarFragment(searchField,searchItem,searchMsg)"
+     class="navbar navbar-expand-lg py-2 fixed-top">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">SIWRipetizioni</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav me-auto mb-0 mb-lg-0">
+                <a class="nav-link" href="/listings">Bacheca Annunci</a>
+                <a th:if="${userDetails!=null}" sec:authorize="hasAuthority('TEACHER')" class="nav-link" href="/teacher/myListings">I miei annunci</a>
+                <a  th:if="${userDetails!=null}" sec:authorize="hasAuthority('STUDENT')" class="nav-link" href="/student/myBookings">Le mie Prenotazioni</a>
+            </div>
+
+            <!-- Sposto il blocco login qui, con ms-auto per spingerlo a destra -->
+            <div class="navbar-nav mb-0 mb-lg-0 ms-auto">
+                <div th:if="${searchField}">
+                    <div th:replace="~{fragments/navBar :: searchBarFragment(${searchItem},${searchMsg})}"></div>
+                </div>
+                <a class="nav-link" th:if="${userDetails==null}" href="/login">Login</a>
+                <a class="nav-link" th:if="${userDetails!=null}" href="/logout"
+                   th:text="${userDetails.username}"></a>
+            </div>
+        </div>
+    </div>
+
+</nav>
+</body>
