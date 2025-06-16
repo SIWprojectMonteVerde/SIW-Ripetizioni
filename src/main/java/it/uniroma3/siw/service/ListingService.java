@@ -44,5 +44,8 @@ public class ListingService {
     public void removeAvailabilityFromListing(Long availabilityId, Long listingId) {
          listingRepository.removeAvailabilityFromListing(availabilityId, listingId);
     }
+    public void removeListing(Long listingId) {
+        listingRepository.deleteById(listingId);
+    }
 
 }
