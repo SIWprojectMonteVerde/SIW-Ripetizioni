@@ -24,6 +24,8 @@ public class Credentials {
     private String username;
     private String password;
     private String role;
+    private boolean oauthUser = false;
+    private boolean registrationComplete = true;
 
     @OneToOne(cascade = CascadeType.PERSIST)
     private Student student;
@@ -61,6 +63,22 @@ public class Credentials {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isOauthUser() {
+        return oauthUser;
+    }
+
+    public void setOauthUser(boolean oauthUser) {
+        this.oauthUser = oauthUser;
+    }
+
+    public boolean isRegistrationComplete() {
+        return registrationComplete;
+    }
+
+    public void setRegistrationComplete(boolean registrationComplete) {
+        this.registrationComplete = registrationComplete;
     }
 
     public User getUser() {

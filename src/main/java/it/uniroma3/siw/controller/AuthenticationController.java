@@ -5,6 +5,7 @@ package it.uniroma3.siw.controller;
 
 
 
+import it.uniroma3.siw.authentication.CustomUserPrincipal;
 import it.uniroma3.siw.controller.validator.CredentialsValidator;
 import it.uniroma3.siw.controller.validator.UserValidator;
 import it.uniroma3.siw.model.Credentials;
@@ -24,7 +25,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Optional;
 
 
 @Controller
@@ -99,6 +102,43 @@ public class AuthenticationController {
         }
         return "index.html";
     }
+
+    @GetMapping("/select-role")
+    public String selectRole() {
+        return "select-role";
+    }
+
+    @PostMapping("/select-role")
+    public String processRoleSelection(@RequestParam("role") String role,
+                                       Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserPrincipal) {
+            CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
+            Credentials credentials = credentialsService.getCredentialsByUsername(principal.getName());
+
+            if (credentials!=null) {
+                // Verifica che il ruolo sia valido (STUDENT o TEACHER)
+                if ("STUDENT".equals(role) || "TEACHER".equals(role)) {
+                    if("STUDENT".equals(role)){
+                        credentials.setRole(Credentials.STUDENT_ROLE);
+                    }else if("TEACHER".equals(role)){
+                        credentials.setRole(Credentials.TEACHER_ROLE);
+                    }
+
+                    credentials.setRegistrationComplete(true);
+                    credentialsService.saveCredentials(credentials);
+
+                    // Forza il ricaricamento dell'autenticazione
+                    SecurityContextHolder.clearContext();
+
+                    return "redirect:/";
+                }
+            }
+        }
+
+        return "redirect:/select-role?error";
+    }
+
+
 
     private String validateNewUser(Credentials credentials, User user, String confirmPassword, BindingResult credentialsBindingResult, BindingResult userBindingResult, Model model) {
         this.userValidator.validate(user, userBindingResult);
