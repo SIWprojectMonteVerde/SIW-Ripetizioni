@@ -31,7 +31,7 @@ public class AvailabilityListValidator implements Validator {
 
         // Validazione della lista nel suo insieme
         if (availabilities == null || availabilities.isEmpty()) {
-            errors.rejectValue("availabilities", "availabilities.empty", "Devi inserire almeno una disponibilità");
+            errors.reject( "availabilities.empty");
             return;
         }
 

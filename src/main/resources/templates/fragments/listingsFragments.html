@@ -70,7 +70,7 @@
                onclick="removeNewAvailability(this)" >
               <i class="bi bi-x-lg text-white" style="font-size: 12px;"></i>
             </a><!--Tasto per form new-->
-            <button type="button"
+            <button th:if="${action}=='updateListing'" type="button"
                     class="btn btn-sm btn-danger position-absolute bg-danger border-0 rounded-circle p-1"
                     style="top: -7px; right: -7px; width: 24px; height: 24px;
                display: flex; align-items: center; justify-content: center;"
