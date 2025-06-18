@@ -15,12 +15,8 @@
 
 <main class="container">
 
-  <section class="search">
-    <h1>Cerca Lezioni</h1>
-    <form th:action="@{/}" method="get">
-      <input type="text" name="query" placeholder="Cerca per subject o teacher">
-      <button type="submit">Cerca</button>
-    </form>
+  <section class="search_zone">
+    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere})"></div>
   </section>
 
   <section class="annunci">

@@ -1,0 +1,14 @@
+<li th:fragment="user-dropdown(user)" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="profiloDropdown" role="button"
+       data-bs-toggle="dropdown" aria-expanded="false" th:text="${user != null ? user.email : 'Guest'}"></a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profiloDropdown">
+        <li>
+            <h6 class="dropdown-header fw-bold">
+                Benvenuto <span th:text="${user != null ? user.firstName : 'Guest'} + ' ' +${user != null ? user.lastName : 'Guest'}">Mario Rossi</span>
+            </h6>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" th:href="@{/myProfile/changePassword}">Cambia password</a></li>
+        <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+    </ul>
+</li>
