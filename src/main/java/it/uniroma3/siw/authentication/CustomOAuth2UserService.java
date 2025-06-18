@@ -3,6 +3,7 @@ package it.uniroma3.siw.authentication;
 
 
 import it.uniroma3.siw.model.Credentials;
+import it.uniroma3.siw.model.Student;
 import it.uniroma3.siw.model.User;
 import it.uniroma3.siw.repository.CredentialsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Optional<Credentials> credentialsOpt = credentialsRepository.findByUsername(email);
         if (credentialsOpt.isEmpty()) {
             // Crea nuovo utente
-            User user = new User();
+            User user = new Student(); //TODO SOLUZIONE NON PULITA, CERCARNE UNA MIGLIORE
             user.setFirstName(firstName != null ? firstName : name);
             user.setLastName(lastName);
             user.setEmail(email);
             Credentials credentials = new Credentials();
             credentials.setUsername(email);
             credentials.setPassword(UUID.randomUUID().toString()); //TODO AGGIUNGERE CAMPO A CREDENTIALS PER DISTINGUERE UTENTI OAUTH DA UTENTI "INTERNI"
-            credentials.setRole(Credentials.STUDENT_ROLE);
+            credentials.setRole(Credentials.NO_ROLE);
             credentials.setOauthUser(true);
             credentials.setRegistrationComplete(false); // COSI DEVE SCEGLIERE IL RUOLO
             credentials.setUser(user);
@@ -55,7 +56,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Credentials credentials = credentialsRepository.findByUsername(email).get();
         return new CustomUserPrincipal(
                 credentials.getUsername(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + credentials.getRole())),
+                Collections.singleton(new SimpleGrantedAuthority(credentials.getRole())), //POTENZIALMENTE RIMUOVERE ROLE
                 attributes,credentials.isRegistrationComplete()
         );
     }

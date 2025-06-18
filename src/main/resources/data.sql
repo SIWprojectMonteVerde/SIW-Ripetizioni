@@ -19,6 +19,6 @@ VALUES (nextval('users_seq'), 'TEACHER', 'teacher@mail.com', 'Teacher', 'Teacher
         (nextval('users_seq'), 'STUDENT', 'student@mail.com', 'Student', 'Student');
 
 
-INSERT INTO public.credentials (id, student_id, teacher_id, password, role, username)
-VALUES (nextval('credentials_seq'), null, 1, '$2a$10$w/I292S9GLPxJdWQDXltmulmw01uWCV7R6VFlj6MMlyGeSbeCpeCq', 'TEACHER', 'teacher'),
-       (nextval('credentials_seq'), 51, null, '$2a$10$w/I292S9GLPxJdWQDXltmulmw01uWCV7R6VFlj6MMlyGeSbeCpeCq', 'STUDENT', 'student');
+INSERT INTO public.credentials (id, student_id, teacher_id, password, role, username,oauth_user,registration_complete)
+VALUES (nextval('credentials_seq'), null, 1, '$2a$10$w/I292S9GLPxJdWQDXltmulmw01uWCV7R6VFlj6MMlyGeSbeCpeCq', 'TEACHER', 'teacher',false,true),
+       (nextval('credentials_seq'), 51, null, '$2a$10$w/I292S9GLPxJdWQDXltmulmw01uWCV7R6VFlj6MMlyGeSbeCpeCq', 'STUDENT', 'student',false,true);
