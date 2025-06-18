@@ -31,12 +31,17 @@
                 <div th:if="${searchField}">
                     <div th:replace="~{fragments/navBar :: searchBarFragment(${searchItem},${searchMsg})}"></div>
                 </div>
-                <a class="nav-link" th:if="${userDetails==null}" href="/login">Login</a>
-                <a class="nav-link" th:if="${userDetails!=null}" href="/logout"
-                   th:text="${userDetails.username}"></a>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item" th:if="${userDetails == null}"><a class="nav-link" href="/login">Login</a></li>
+
+                    <li class="nav-item" th:if="${userDetails != null and currentUser != null}"
+                        th:insert="~{fragments/dropdownProfile :: user-dropdown(user=${currentUser})}">
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
 </nav>
+
 </body>

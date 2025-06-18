@@ -12,4 +12,8 @@ public class SubjectService {
     public Iterable<Subject> getAll() {
         return repository.findAll();
     }
+    public Integer count() {
+        return (int) repository.count();
+    }
+
 }

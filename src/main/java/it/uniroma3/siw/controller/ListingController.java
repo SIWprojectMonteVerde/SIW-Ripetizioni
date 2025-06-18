@@ -2,7 +2,9 @@ package it.uniroma3.siw.controller;
 
 import it.uniroma3.siw.controller.validator.AvailabilityListValidator;
 import it.uniroma3.siw.model.Availability;
+import it.uniroma3.siw.model.Dto.MateriaDto;
 import it.uniroma3.siw.model.Listing;
+import it.uniroma3.siw.model.Subject;
 import it.uniroma3.siw.model.Teacher;
 import it.uniroma3.siw.service.*;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,8 +43,9 @@ public class ListingController {
 
     //VISUALIZZAZIONE ANNUNCI
     @GetMapping("/listings")
-    public String showListings(Model model) {
+    public String showListings(@RequestParam(name = "subj", defaultValue = "-1") Long MateriaID, Model model) {
         model.addAttribute("listings", listingService.findAllWithAvailabilities());
+        model.addAttribute("genere", buildGenreList(MateriaID));
         return "listings";
     }
 
@@ -163,5 +167,23 @@ public class ListingController {
         listing.setHourlyRate(temporaryListing.getHourlyRate());
 
     }
+
+    private List<MateriaDto> buildGenreList(Long selectedGenreId) {
+        Iterable<Subject> all = subjectService.getAll();
+        Iterator<Subject> iterator = all.iterator();
+
+        List<MateriaDto> result = new ArrayList<>();
+        while (iterator.hasNext()) {
+            Subject g = iterator.next();
+            result.add(new MateriaDto(
+                    g.getId().equals(selectedGenreId),
+                    listingService.countBySubject(g),
+                    g.getName(),
+                    g.getId()
+            ));
+        }
+        return result;
+    }
+
 
 }
