@@ -20,13 +20,11 @@ public class CredentialsService {
     @Autowired
     private CredentialsRepository credentialsRepository;
 
-    public Credentials getCredentialsByUsername(Long id) {
-        return credentialsRepository.findById(id).orElse(null);
-    }
+
     public Credentials getCredentialsByUsername(String username) {
         return credentialsRepository.findByUsername(username).orElse(null);
     }
-    public Credentials saveCredentials(Credentials credentials) {
+    public void saveCredentials(Credentials credentials) {
         if(credentials.getUser().getClass().equals(Student.class)) {
             credentials.setRole(Credentials.STUDENT_ROLE);
         }else{
@@ -34,7 +32,7 @@ public class CredentialsService {
         }
 
         credentials.setPassword(this.passwordEncoder.encode(credentials.getPassword()));
-        return credentialsRepository.save(credentials);
+        credentialsRepository.save(credentials);
     }
     public Boolean credentialsExistsByUsername(String username) {
         return credentialsRepository.findByUsername(username).isPresent();

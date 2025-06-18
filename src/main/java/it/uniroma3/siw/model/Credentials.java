@@ -16,6 +16,7 @@ public class Credentials {
     public static final String STUDENT_ROLE = "STUDENT";
     public static final String ADMIN_ROLE = "ADMIN";
     public static final String TEACHER_ROLE = "TEACHER";
+    public static final String NO_ROLE = "NO_ROLE";
 
 
     @Id
@@ -24,11 +25,13 @@ public class Credentials {
     private String username;
     private String password;
     private String role;
+    private boolean oauthUser = false;
+    private boolean registrationComplete = true;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Student student;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Teacher teacher;
 
     public Long getId() {
@@ -61,6 +64,22 @@ public class Credentials {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public boolean isOauthUser() {
+        return oauthUser;
+    }
+
+    public void setOauthUser(boolean oauthUser) {
+        this.oauthUser = oauthUser;
+    }
+
+    public boolean isRegistrationComplete() {
+        return registrationComplete;
+    }
+
+    public void setRegistrationComplete(boolean registrationComplete) {
+        this.registrationComplete = registrationComplete;
     }
 
     public User getUser() {

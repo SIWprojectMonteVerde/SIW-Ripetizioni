@@ -5,6 +5,7 @@ package it.uniroma3.siw.controller;
 
 
 
+import it.uniroma3.siw.authentication.CustomUserPrincipal;
 import it.uniroma3.siw.controller.validator.CredentialsValidator;
 import it.uniroma3.siw.controller.validator.UserValidator;
 import it.uniroma3.siw.model.Credentials;
@@ -15,7 +16,9 @@ import it.uniroma3.siw.service.CredentialsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -24,7 +27,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
+import java.util.Collections;
+import java.util.Optional;
 
 
 @Controller
@@ -100,6 +107,50 @@ public class AuthenticationController {
         return "index.html";
     }
 
+    @GetMapping("/selectRole")
+    public String selectRole() {
+        return "selectRole";
+    }
+
+    @PostMapping("/selectRole")
+    public String processRoleSelection(@RequestParam("role") String role,Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserPrincipal) {
+            CustomUserPrincipal principal = (CustomUserPrincipal) authentication.getPrincipal();
+            Credentials credentials = credentialsService.getCredentialsByUsername(principal.getName());
+            if(credentials.isRegistrationComplete()) {
+                return "redirect:/";
+            }
+            if (credentials!=null) {
+                // Verifica che il ruolo sia valido (STUDENT o TEACHER)
+                if ("STUDENT".equals(role) || "TEACHER".equals(role)) {
+                    if("STUDENT".equals(role)){
+                        credentials.setRole(Credentials.STUDENT_ROLE);
+                    }else if("TEACHER".equals(role)){
+                        Teacher teacher = new Teacher(); //DI DEFAULT USER E' DI TIPO STUDENTE, QUI SERVE EFFETTUARE IL CAMBIO E COPIARE I DATI
+                        teacher.setFirstName(credentials.getUser().getFirstName());
+                        teacher.setLastName(credentials.getUser().getLastName());
+                        teacher.setEmail(credentials.getUser().getEmail());
+                        credentials.setUser(teacher);
+                        credentials.setRole(Credentials.TEACHER_ROLE);
+                        User oldUser = credentials.getUser();
+                        System.out.println("firstName='" + oldUser.getFirstName() + "'");
+                        System.out.println("lastName='" + oldUser.getLastName() + "'");
+                        System.out.println("email='" + oldUser.getEmail() + "'");
+                    }
+
+                    credentials.setRegistrationComplete(true);
+                    credentialsService.saveCredentials(credentials);
+                    reloadRole(credentials,principal,authentication); // ALTRIMENTI SI RISCHIA DI RIMANERE CON IL RUOLO SBAGLIATO
+                    return "redirect:/";
+                }
+            }
+        }
+
+        return "redirect:/";
+    }
+
+
+
     private String validateNewUser(Credentials credentials, User user, String confirmPassword, BindingResult credentialsBindingResult, BindingResult userBindingResult, Model model) {
         this.userValidator.validate(user, userBindingResult);
         if(!confirmPassword.equals(credentials.getPassword())) {
@@ -113,6 +164,26 @@ public class AuthenticationController {
 
         credentialsService.saveCredentials(credentials);
         return "redirect:login";
+    }
+    private  void reloadRole(Credentials credentials, CustomUserPrincipal principal,Authentication authentication) {
+        // RELOAD DEL RUOLO
+        CustomUserPrincipal newPrincipal = new CustomUserPrincipal(
+                credentials.getUsername(),
+                Collections.singleton(new SimpleGrantedAuthority(credentials.getRole())),
+                principal.getAttributes(),
+                credentials.isRegistrationComplete()
+        );
+
+        // RICREA l'Authentication aggiornata
+        UsernamePasswordAuthenticationToken newAuth = new UsernamePasswordAuthenticationToken(
+                newPrincipal,
+                authentication.getCredentials(),
+                newPrincipal.getAuthorities()
+        );
+
+        // Sostituisci quella corrente nel SecurityContext senza pulire
+        SecurityContextHolder.getContext().setAuthentication(newAuth);
+
     }
 }
 

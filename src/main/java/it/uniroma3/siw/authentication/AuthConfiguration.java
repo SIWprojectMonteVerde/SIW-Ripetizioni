@@ -3,6 +3,7 @@ package it.uniroma3.siw.authentication;
 
 import javax.sql.DataSource;
 
+import it.uniroma3.siw.repository.CredentialsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +22,13 @@ import static it.uniroma3.siw.model.Credentials.*;
 @EnableWebSecurity
 public class AuthConfiguration {
 
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private CredentialsRepository credentialsRepository;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -47,9 +52,11 @@ public class AuthConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         // .requestMatchers("/**").permitAll()
                         // chiunque (autenticato o no) può accedere alle pagine index, login, register, ai css e alle immagini
-                        .requestMatchers(HttpMethod.GET, "/listings/**", "/index", "/index", "/register/**", "/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/listings/**", "/index", "/index", "/register/**","/login" ,"/css/**", "/images/**", "/js/**", "/favicon.ico").permitAll()
                         // chiunque (autenticato o no) può mandare richieste POST al punto di accesso per login e register
                         .requestMatchers(HttpMethod.POST, "/register/**", "/login").permitAll()//TODO MODIFICARE
+                        .requestMatchers(HttpMethod.GET, "/selectRole").hasAnyAuthority(NO_ROLE)
+                        .requestMatchers(HttpMethod.POST, "/selectRole").hasAnyAuthority(NO_ROLE) //SOLO GLI UTENTI CHE NON HANNO ANCORA UN RUOLO POSSONO SCEGLIERNE UNO
                         .requestMatchers(HttpMethod.GET, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
                         .requestMatchers(HttpMethod.POST, "/teacher/**").hasAnyAuthority(TEACHER_ROLE)
                         .requestMatchers(HttpMethod.GET, "/student/**").hasAnyAuthority(STUDENT_ROLE)
@@ -62,6 +69,20 @@ public class AuthConfiguration {
                         .permitAll()
                         .defaultSuccessUrl("/success", true)
                         .failureUrl("/login?error=true"))
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .successHandler((request, response, authentication) -> {
+                            String email = authentication.getName();
+                            var credentialsOpt = credentialsRepository.findByUsername(email);
+
+                            if (credentialsOpt.isPresent() && !credentialsOpt.get().isRegistrationComplete()) {
+                                response.sendRedirect("/selectRole");
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        })
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                )
                 .logout(logout -> logout
                         // il logout è attivato con una richiesta GET a "/logout"
                         .logoutUrl("/logout")
