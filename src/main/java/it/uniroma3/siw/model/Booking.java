@@ -48,7 +48,7 @@ public class Booking {
         this.student = student;
     }
 
-    public Availability getDisponibilita() {
+    public Availability getAvailability() {
         return availability;
     }
 

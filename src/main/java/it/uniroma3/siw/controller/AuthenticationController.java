@@ -8,10 +8,8 @@ package it.uniroma3.siw.controller;
 import it.uniroma3.siw.authentication.CustomUserPrincipal;
 import it.uniroma3.siw.controller.validator.CredentialsValidator;
 import it.uniroma3.siw.controller.validator.UserValidator;
-import it.uniroma3.siw.model.Credentials;
-import it.uniroma3.siw.model.Teacher;
-import it.uniroma3.siw.model.Student;
-import it.uniroma3.siw.model.User;
+import it.uniroma3.siw.model.*;
+import it.uniroma3.siw.service.BookingService;
 import it.uniroma3.siw.service.CredentialsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +34,21 @@ import java.util.Optional;
 
 @Controller
 public class AuthenticationController {
+
+    //SERVIZI
     @Autowired
     private CredentialsService credentialsService;
+
+    @Autowired
+    private BookingService bookingService;
+
+    //VALIDATOR
     @Autowired
     private CredentialsValidator credentialsValidator;
     @Autowired
     private UserValidator userValidator;
+
+
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -102,6 +109,9 @@ public class AuthenticationController {
             Credentials credentials = credentialsService.getCredentialsByUsername(userDetails.getUsername());
             if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
                 return "admin/indexAdmin.html";
+            }
+            if(credentials.getRole().equals(Credentials.STUDENT_ROLE)) {
+                model.addAttribute("nextBookings",bookingService.findByStudentOrderedByDate(credentials.getStudent()));
             }
         }
         return "index.html";

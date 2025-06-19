@@ -24,8 +24,11 @@ public class BookingService {
     public Booking findById(Long id) {
         return bookingRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Prenotazione con ID " + id + " non trovato"));
     }
-    public Iterable<Booking> findByUser(Student student) {
+    public Iterable<Booking> findByStudent(Student student) {
         return bookingRepository.findByStudent(student);
+    }
+    public Iterable<Booking> findByStudentOrderedByDate(Student student) {
+        return bookingRepository.findByStudentOrderByAvailabilityDate(student);
     }
     public boolean listingHasActiveBookings(Long listingId){
         return bookingRepository.listingHasActiveBookings(listingId);
