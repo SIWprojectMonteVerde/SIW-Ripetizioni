@@ -2,6 +2,7 @@ package it.uniroma3.siw.service;
 
 import it.uniroma3.siw.model.Booking;
 import it.uniroma3.siw.model.Student;
+import it.uniroma3.siw.model.Teacher;
 import it.uniroma3.siw.repository.BookingRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,8 @@ public class BookingService {
     }
     public boolean listingHasActiveBookings(Long listingId){
         return bookingRepository.listingHasActiveBookings(listingId);
+    }
+    public Iterable<Booking> findByTeacher(Teacher teacher) {
+        return bookingRepository.findOrdByAvailabilityListingTeacherOrderByAvailabilityDate(teacher);
     }
 }

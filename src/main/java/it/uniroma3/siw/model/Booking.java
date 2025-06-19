@@ -40,11 +40,11 @@ public class Booking {
         Fine = fine;
     }
 
-    public Student getUtente() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setUtente(Student student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 

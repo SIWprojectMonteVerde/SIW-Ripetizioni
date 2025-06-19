@@ -3,6 +3,7 @@ package it.uniroma3.siw.repository;
 import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Booking;
 import it.uniroma3.siw.model.Student;
+import it.uniroma3.siw.model.Teacher;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -17,4 +18,8 @@ public interface BookingRepository extends CrudRepository<Booking, Long> {
 	public boolean listingHasActiveBookings(@Param("listing_id") Long listingId);
 
 	List<Booking> findByStudentOrderByAvailabilityDate(Student student);
+
+	List<Booking> findByAvailabilityListingTeacher(Teacher availabilityListingTeacher);
+
+	List<Booking> findOrdByAvailabilityListingTeacherOrderByAvailabilityDate(Teacher availabilityListingTeacher);
 }

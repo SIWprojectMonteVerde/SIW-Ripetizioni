@@ -112,6 +112,8 @@ public class AuthenticationController {
             }
             if(credentials.getRole().equals(Credentials.STUDENT_ROLE)) {
                 model.addAttribute("nextBookings",bookingService.findByStudentOrderedByDate(credentials.getStudent()));
+            } else if (credentials.getRole().equals(Credentials.TEACHER_ROLE)) {
+                model.addAttribute("nextBookings",bookingService.findByTeacher(credentials.getTeacher()));
             }
         }
         return "index.html";

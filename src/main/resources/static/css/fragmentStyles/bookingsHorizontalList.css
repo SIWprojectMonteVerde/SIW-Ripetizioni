@@ -1,0 +1,17 @@
+.btn-xs {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+    line-height: 1;
+}
+
+.card-horizontal {
+    width: 18rem;
+}
+.horizontal-cards{
+    gap: 1rem;
+}
+
+.delete-btn {
+    padding: 0.25rem 0.4rem;
+    font-size: 0.75rem;
+}

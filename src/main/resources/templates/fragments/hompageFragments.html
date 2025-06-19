@@ -86,6 +86,49 @@
     </div>
   </div>
 </section>
+<link rel="stylesheet" href="/css/hero.css">
+<section th:fragment="welcomePage-registeredStudent" class="student-section">
+  <div class="student-content">
+    <img src="/images/learning-student.png" alt="Studente che studia con successo" class="student-image" />
+
+    <div class="student-text">
+      <h2>Benvenuto di nuovo!</h2>
+      <p>Continua il tuo percorso di apprendimento. Gestisci le tue prenotazioni, trova nuovi corsi e raggiungi i tuoi obiettivi.</p>
+
+
+      <div class="role-note">
+        <small>
+          <i class="bi bi-lightbulb"></i>
+          Hai una prenotazione oggi? Controlla i dettagli nella sezione qui sotto
+        </small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section th:fragment="welcomePage-registeredTeacher" class="student-section">
+  <div class="student-content">
+    <img src="/images/teacher.png" alt="Insegnante che fa lezione" class="student-image" />
+
+    <div class="student-text">
+      <h2>Bentornato, Professore!</h2>
+      <p>Gestisci i tuoi annunci, controlla le prenotazioni degli studenti e continua a condividere la tua conoscenza.</p>
+
+      <div class="hero-buttons">
+        <a href="/teacher/listings" class="btn btn-login">
+          <i class="bi bi-plus-circle"></i> Tutti i tuoi annunci
+        </a>
+      </div>
+
+      <div class="role-note">
+        <small>
+          <i class="bi bi-info-circle"></i>
+          Quali sono le tue prossime prenotazioni? Controlla la sezione qui sotto
+        </small>
+      </div>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>
