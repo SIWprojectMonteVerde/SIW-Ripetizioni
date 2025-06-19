@@ -1,0 +1,17 @@
+.google-btn {
+    transition: all 0.2s ease;
+}
+
+.google-btn:hover {
+    background-color: #dd4b39;
+    color: white;
+}
+
+.google-btn img {
+    filter: none;
+    transition: all 0.2s ease;
+}
+
+.google-btn:hover img {
+    filter: brightness(0) invert(1);
+}

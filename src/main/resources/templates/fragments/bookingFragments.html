@@ -1,0 +1,100 @@
+<!-- fragments/bookings.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+<div th:fragment="bookingsListFragment(bookings)">
+  <!-- Lista prenotazioni -->
+  <div th:if="${bookings != null and !bookings.isEmpty()}">
+    <div class="row">
+      <div th:each="booking : ${bookings}" class="col-md-6 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title" th:text="${booking.availability.listing.title}">Titolo annuncio</h5>
+            <div class="row align-items-center">
+              <div class="col-9">
+                <p class="card-text">
+                  <strong>Docente:</strong>
+                  <span th:text="${booking.availability.listing.teacher.firstName}">Nome docente</span><br>
+                  <strong>Data:</strong>
+                  <span th:text="${#temporals.format(booking.availability.date, 'dd/MM/yyyy')}">01/01/2024</span><br>
+                </p>
+              </div>
+              <div class="col-3 text-end">
+                <a class="btn btn-outline-danger btn"
+                   th:href="@{'/student/deleteBooking/'+${booking.id}}"
+                   title="Cancella prenotazione">
+                  <i class="bi bi-calendar-x-fill"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="/fragments/bookingFragments ::noBookMsg(true)"></div>
+  <!-- Messaggio se non ci sono prenotazioni -->
+
+</div>
+
+
+<div th:fragment="bookingsHorizontalListFragment(bookings,role)">
+  <!-- Lista prenotazioni orizzontale -->
+  <div th:if="${bookings != null and !bookings.isEmpty()}">
+    <div class="d-flex overflow-auto pb-3 horizontal-cards">
+      <div th:each="booking : ${bookings}" class="flex-shrink-0">
+        <div class="card shadow-sm position-relative card-horizontal" >
+          <div class="card-body">
+            <!-- Pulsante di cancellazione in alto a destra -->
+            <a th:if="${role}=='student'" class="btn btn-outline-danger delete-btn position-absolute top-0 end-0 m-2"
+
+               th:href="@{'/student/deleteBooking/'+${booking.id}}"
+               title="Cancella prenotazione">
+              <i class="bi bi-x"></i>
+            </a>
+            <!-- Pill con nome materia -->
+            <span class="badge bg-primary rounded-pill mb-2" th:text="${booking.availability.listing.subject.name}">Materia</span>
+
+            <h5 class="card-title pe-5" th:text="${booking.availability.listing.title}">Titolo annuncio</h5>
+            <p class="card-text">
+              <strong th:if="${role}=='student'" >Docente:</strong>
+              <strong th:if="${role}=='teacher'" >Studente:</strong>
+              <span th:if="${role}=='student'" th:text="${booking.availability.listing.teacher.firstName}">Nome docente</span><br>
+              <span th:if="${role}=='teacher'" th:text="${booking.student.firstName +' '+ booking.student.lastName}">Nome docente</span><br>
+              <strong>Data:</strong>
+              <span th:text="${#temporals.format(booking.availability.date, 'dd/MM/yyyy') + ' (' + #temporals.format(booking.availability.startTime, 'HH:mm') + '-' + #temporals.format(booking.availability.endTime, 'HH:mm') + ')'}">01/01/2024 (10:00-11:00)</span><br>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="/fragments/bookingFragments ::noBookMsg(false)"></div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div th:fragment="noBookMsg(button)" th:if="${bookings == null or bookings.isEmpty()}" class="text-center py-5">
+  <i class="bi bi-calendar-x display-1 text-muted"></i>
+  <h4 class="mt-3 text-muted">Nessuna prenotazione trovata</h4>
+  <p class="text-muted">Non hai ancora effettuato prenotazioni.</p>
+  <a th:if="${button}" href="/listings" class="btn btn-primary">
+    <i class="bi bi-search"></i> Cerca ripetizioni
+  </a>
+</div>
+</body>
+</html>

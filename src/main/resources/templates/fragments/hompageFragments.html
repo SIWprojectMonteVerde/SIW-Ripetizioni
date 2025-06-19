@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<section th:fragment="welcomePage-hero" class="hero-section">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Impara al tuo ritmo, eccelli dove conta</h1>
+      <p>Con le nostre ripetizioni personalizzate, ogni studente può trasformare le difficoltà in risultati.</p>
+
+      <div class="hero-buttons">
+        <a href="/login" class="btn btn-login">Accedi</a>
+        <a href="/register" class="btn btn-register">Registrati</a>
+      </div>
+
+      <p class="role-note">Accesso disponibile per <strong>studenti</strong> e <strong>insegnanti</strong>.</p>
+    </div>
+
+    <img src="/images/student2.png" alt="Studente che studia" class="hero-image" />
+  </div>
+</section>
+
+<section th:fragment="welcomePage-info" class="info-section">
+  <div class="info-content">
+    <img src="/images/student-teacher2.png" alt="Lezione online" class="info-image" />
+
+    <div class="info-text">
+      <h2>Ripetizioni su misura per ogni studente</h2>
+      <h3>Supporto scolastico semplice, efficace e accessibile</h3>
+      <p>
+        Il nostro portale ti mette in contatto con insegnanti qualificati pronti ad aiutarti
+        in ogni materia. Che tu sia alle medie, alle superiori o all’università, puoi trovare
+        la guida giusta per colmare le lacune e migliorare i tuoi risultati scolastici.
+        Le lezioni si svolgono online o in presenza, in totale flessibilità.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="contact-container">
+    <h2>Contattaci</h2>
+    <p>Hai domande o vuoi maggiori informazioni? Siamo qui per aiutarti!</p>
+
+    <div class="contact-cards">
+      <div class="contact-card">
+        <i class="fas fa-phone-alt contact-icon"></i>
+        <div>
+          <h3>Telefono</h3>
+          <a href="tel:+390123456789">+39 012 345 6789</a>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <i class="fas fa-envelope contact-icon"></i>
+        <div>
+          <h3>Email</h3>
+          <a href="mailto:info@ripetizionipro.it">inforipetizionipro.it</a>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <i class="fas fa-map-marker-alt contact-icon"></i>
+        <div>
+          <h3>Indirizzo</h3>
+          <address>Via Roma 123, 00100 Roma, Italia</address>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section th:fragment="welcomePage-student" class="student-section">
+  <div class="student-content">
+    <img src="/images/student-happy.png" alt="Studente felice che studia" class="student-image" />
+
+    <div class="student-text">
+      <h2>Sei uno studente in cerca di ripetizioni?</h2>
+      <p>Scopri i migliori insegnanti e trova il supporto personalizzato per superare ogni difficoltà scolastica.</p>
+      <a href="/listings" class="btn btn-explore">
+        <i class="fas fa-search"></i> Esplora le ripetizioni
+      </a>
+    </div>
+  </div>
+</section>
+<link rel="stylesheet" href="/css/hero.css">
+<section th:fragment="welcomePage-registeredStudent" class="student-section">
+  <div class="student-content">
+    <img src="/images/learning-student.png" alt="Studente che studia con successo" class="student-image" />
+
+    <div class="student-text">
+      <h2>Benvenuto di nuovo!</h2>
+      <p>Continua il tuo percorso di apprendimento. Gestisci le tue prenotazioni, trova nuovi corsi e raggiungi i tuoi obiettivi.</p>
+
+
+      <div class="role-note">
+        <small>
+          <i class="bi bi-lightbulb"></i>
+          Hai una prenotazione oggi? Controlla i dettagli nella sezione qui sotto
+        </small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section th:fragment="welcomePage-registeredTeacher" class="student-section">
+  <div class="student-content">
+    <img src="/images/teacher.png" alt="Insegnante che fa lezione" class="student-image" />
+
+    <div class="student-text">
+      <h2>Bentornato, Professore!</h2>
+      <p>Gestisci i tuoi annunci, controlla le prenotazioni degli studenti e continua a condividere la tua conoscenza.</p>
+
+      <div class="hero-buttons">
+        <a href="/teacher/listings" class="btn btn-login">
+          <i class="bi bi-plus-circle"></i> Tutti i tuoi annunci
+        </a>
+      </div>
+
+      <div class="role-note">
+        <small>
+          <i class="bi bi-info-circle"></i>
+          Quali sono le tue prossime prenotazioni? Controlla la sezione qui sotto
+        </small>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

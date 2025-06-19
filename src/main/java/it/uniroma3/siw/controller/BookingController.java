@@ -28,7 +28,7 @@ public class BookingController {
         Availability availability = avaialabiltyService.findByIdWithBookings(availabiltyId); //SERVE PER CARICARE LE PRENOTAZIONI SENZA USARE EAGER
         if(availability.getBookings().isEmpty()) {//TODO PROBABILMENTE NON SARA' PIU' UNA LISTA
             Booking booking = new Booking();
-            booking.setUtente((Student) userService.getCurrentUser());//CAST POSSIBILE PERCHE' L'URL è protetto
+            booking.setStudent((Student) userService.getCurrentUser());//CAST POSSIBILE PERCHE' L'URL è protetto
             booking.setDisponibilita(availability);
             availability.getBookings().add(booking);
             avaialabiltyService.save(availability);
@@ -39,7 +39,7 @@ public class BookingController {
     @GetMapping("/student/deleteBooking/{booking_id}")
     public String deleteBooking(@PathVariable("booking_id") Long bookingId, Model model) {
         Booking booking = bookingService.findById(bookingId);
-        if(booking.getUtente().getId().equals(userService.getCurrentUser().getId())) {
+        if(booking.getStudent().getId().equals(userService.getCurrentUser().getId())) {
             bookingService.delete(booking);
         }
         return "redirect:/student/myBookings";
