@@ -14,7 +14,7 @@
 
 - **Java & Spring Boot** – Backend e logica applicativa
 - **Thymeleaf** – Template engine per la parte frontend
-- **HTML5, CSS3, Bootstrap** – Interfaccia utente semplice e reattiva
+- **HTML5, CSS3, Bootstrap** – Interfaccia student semplice e reattiva
 - **JPA / Hibernate** – Gestione della persistenza
 - **PostGresSQL** – Database in-memory per test e sviluppo
 
@@ -41,11 +41,11 @@
 Puoi accedere con degli utenti preconfigurati per testare il sistema:
 
 **Studente**  
-- Email: `studente@example.com`  
+- Email: `student@example.com`  
 - Password: `password`
 
 **Insegnante**  
-- Email: `insegnante@example.com`  
+- Email: `teacher@example.com`  
 - Password: `password`
 
 ## 📝 Note

@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.Optional;
@@ -83,17 +85,17 @@ public class AuthenticationController {
 
 
     @PostMapping("/register/student")
-    public String saveStudent(@Valid @ModelAttribute("credentials") Credentials credentials,BindingResult credentialsBindingResult,@Valid  @ModelAttribute("user") Student student, BindingResult userBindingResult, @ModelAttribute("confirmPassword") String confirmPassword,Model model) {
+    public String saveStudent(@Valid @ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult, @Valid  @ModelAttribute("user") Student student, BindingResult userBindingResult, @ModelAttribute("confirmPassword") String confirmPassword, @RequestParam("imageFile") MultipartFile imageFile,Model model) {
         credentials.setUser(student);
-        return validateNewUser(credentials, student, confirmPassword, credentialsBindingResult, userBindingResult, model);
+        return validateNewUser(credentials, student, confirmPassword, credentialsBindingResult, userBindingResult,imageFile,model);
     }
 
 
 
     @PostMapping("/register/teacher")
-    public String registerTeacher(@Valid @ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult,@Valid @ModelAttribute("user") Teacher teacher,BindingResult userBindingResult,Model model , @ModelAttribute("confirmPassword") String confirmPassword) {
+    public String registerTeacher(@Valid @ModelAttribute("credentials") Credentials credentials, BindingResult credentialsBindingResult,@Valid @ModelAttribute("user") Teacher teacher,BindingResult userBindingResult,@ModelAttribute("confirmPassword") String confirmPassword, @RequestParam("imageFile") MultipartFile imageFile, Model model) {
         credentials.setUser(teacher);
-        return validateNewUser(credentials,teacher,confirmPassword,credentialsBindingResult,userBindingResult,model);
+        return validateNewUser(credentials,teacher,confirmPassword,credentialsBindingResult,userBindingResult,imageFile,model);
     }
 
 
@@ -163,7 +165,7 @@ public class AuthenticationController {
 
 
 
-    private String validateNewUser(Credentials credentials, User user, String confirmPassword, BindingResult credentialsBindingResult, BindingResult userBindingResult, Model model) {
+    private String validateNewUser(Credentials credentials, User user, String confirmPassword, BindingResult credentialsBindingResult, BindingResult userBindingResult,MultipartFile imageFile ,Model model) {
         this.userValidator.validate(user, userBindingResult);
         if(!confirmPassword.equals(credentials.getPassword())) {
             model.addAttribute("passwordError", "Le password non corrispondono");
@@ -173,7 +175,13 @@ public class AuthenticationController {
         if(credentialsBindingResult.hasErrors() || model.containsAttribute("passwordError")||userBindingResult.hasErrors()) {
             return user.getClass().getSimpleName().toLowerCase()+"/register"+user.getClass().getSimpleName(); //RITORNO ALLA PAGINA DI REGISTRAZIONE OPPORTUNA (ES con Teacher -> teacher/registerTeacher)
         }
-
+        Image picture = new Image();
+        try {
+            picture.setData(imageFile.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        user.setPicture(picture);
         credentialsService.saveCredentials(credentials);
         return "redirect:login";
     }
