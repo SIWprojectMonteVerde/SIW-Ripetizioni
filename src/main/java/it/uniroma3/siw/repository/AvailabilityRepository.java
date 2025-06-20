@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,6 @@ public interface AvailabilityRepository extends CrudRepository<Availability, Lon
 
 	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.id NOT IN (select b.availability_id FROM booking b) and a.listing_id= :id")
 	List<Availability> findByIdAndNoBookings(Long id);
+
+    Iterable<Availability> findByDate(LocalDate day);
 }
