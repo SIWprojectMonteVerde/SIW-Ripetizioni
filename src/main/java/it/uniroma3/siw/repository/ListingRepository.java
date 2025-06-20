@@ -2,6 +2,7 @@ package it.uniroma3.siw.repository;
 
 import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Listing;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,6 +11,7 @@ import it.uniroma3.siw.model.Subject;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -33,4 +35,12 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 
 
 	Iterable<Listing> findByAvailability(Availability availability);
+
+	@Query("""
+    SELECT DISTINCT l FROM Listing l
+    LEFT JOIN FETCH l.availabilities a
+    WHERE a IN :availabilities
+""")
+	List<Listing> findByAvailabilitiesIn(@Param("availabilities") List<Availability> availabilities);
+
 }
