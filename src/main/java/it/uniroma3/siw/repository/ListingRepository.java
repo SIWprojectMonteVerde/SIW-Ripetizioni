@@ -32,4 +32,5 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 	public void removeAvailabilityFromListing(@Param("availability_id") Long availabilityId, @Param("listing_id") Long listingId);
 
 
+	Iterable<Listing> findByAvailability(Availability availability);
 }

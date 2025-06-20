@@ -50,4 +50,5 @@ public class ListingService {
     }
     public Iterable<Listing> findBySubject(Subject subject) {return listingRepository.findBySubject(subject);}
     public Long countBySubject(Subject subject) {return listingRepository.countBySubject(subject);}
+    public Iterable<Listing> findByAvailabilities(Availability availability) {return listingRepository.findByAvailability(availability);}
 }

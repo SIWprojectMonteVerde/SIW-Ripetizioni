@@ -15,5 +15,14 @@ public class SubjectService {
     public Integer count() {
         return (int) repository.count();
     }
+    public Subject save(Subject subject) {
+        return repository.save(subject);
+    }
+    public Subject findById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+    public void delete(Subject subject) {
+        repository.delete(subject);
+    }
 
 }
