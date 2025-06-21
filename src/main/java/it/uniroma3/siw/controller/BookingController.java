@@ -46,7 +46,7 @@ public class BookingController {
     }
     @GetMapping("/student/myBookings")
     public String myBookings(Model model) {
-        model.addAttribute("bookings", bookingService.findAll());
+        model.addAttribute("bookings", bookingService.findByStudent((Student) userService.getCurrentUser()));
         return "student/myBookings";
     }
 

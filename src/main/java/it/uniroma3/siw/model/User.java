@@ -3,6 +3,8 @@ package it.uniroma3.siw.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 
+import java.util.Objects;
+
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
@@ -18,6 +20,8 @@ public abstract class User {
     private String lastName;
     @NotEmpty
     private String email;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Image picture;
 
     public void setId(Long id) {
         this.id = id;
@@ -49,5 +53,24 @@ public abstract class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Image getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Image picture) {
+        this.picture = picture;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(email);
     }
 }
