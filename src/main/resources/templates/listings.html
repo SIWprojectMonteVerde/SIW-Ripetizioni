@@ -16,7 +16,7 @@
 <main class="container">
 
   <section class="search_zone">
-    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere})"></div>
+    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere},sortBy=${param.sortBy != null ? param.sortBy : 'DATE_DESC'})"></div>
   </section>
 
   <section class="annunci">
@@ -43,5 +43,6 @@
   <p>© 2025 SIW Ripetizioni - Tutti i diritti riservati</p>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/searchBar.js"></script>
 </body>
 </html>
