@@ -16,7 +16,7 @@
 <main class="container">
 
   <section class="search_zone">
-    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere},sortBy=${param.sortBy != null ? param.sortBy : 'DATE_DESC'})"></div>
+    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere})"></div>
   </section>
 
   <section class="annunci">
