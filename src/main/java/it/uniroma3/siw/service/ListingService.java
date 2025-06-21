@@ -1,11 +1,12 @@
 package it.uniroma3.siw.service;
 
-import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Listing;
 import it.uniroma3.siw.model.Subject;
 import it.uniroma3.siw.repository.ListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ListingService {
@@ -50,5 +51,5 @@ public class ListingService {
     }
     public Iterable<Listing> findBySubject(Subject subject) {return listingRepository.findBySubject(subject);}
     public Long countBySubject(Subject subject) {return listingRepository.countBySubject(subject);}
-    public Iterable<Listing> findByAvailabilities(Availability availability) {return listingRepository.findByAvailability(availability);}
+    public Iterable<Listing> findBySubjectWithAvailabilities(Long subjectId) {return listingRepository.findBySubjectIdWithAvailabilities(subjectId);}
 }
