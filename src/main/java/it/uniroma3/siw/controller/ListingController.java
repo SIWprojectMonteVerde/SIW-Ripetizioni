@@ -46,12 +46,13 @@ public class ListingController {
 
     //VISUALIZZAZIONE ANNUNCI
     @GetMapping("/listings")
-    public String showListings(@RequestParam(name = "subj", defaultValue = "-1") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    public String showListings(@RequestParam(name = "subj") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, Model model) {
 
 
-        //Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime);
+
+        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId);
 
         Iterable<Listing> listings = listingService.findAll(); //sostituire con get all
 
