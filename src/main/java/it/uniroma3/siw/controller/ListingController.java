@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,16 +46,15 @@ public class ListingController {
 
     //VISUALIZZAZIONE ANNUNCI
     @GetMapping("/listings")
-    public String showListings(@RequestParam(name = "subj", defaultValue = "-1") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day,
-                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startHour,
-                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endHour, Model model) {
+    public String showListings(@RequestParam(name = "subj", defaultValue = "-1") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, Model model) {
 
-        Iterable<Listing> listings = new ArrayList<>();
-        if(subjectId != -1) {
-            listings=listingService.findBySubjectWithAvailabilities(subjectId);
-        }else {
-           listings= listingService.findAllWithAvailabilities();
-        }
+
+        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime);
+
+        listings = listingService.findAllWithAvailabilities();
+
         model.addAttribute("listings", listings);
 
         model.addAttribute("genere", buildGenreList(subjectId));
@@ -116,7 +116,7 @@ public class ListingController {
     }
 
     @PostMapping("/teacher/updateListing")
-    public String updateListing(@Valid @ModelAttribute("listing") Listing listing,BindingResult bindingResult,Model model) { //TODO VALUTARE SE USARE PARAMETRO ID
+    public String updateListing(@Valid @ModelAttribute("listing") Listing listing, BindingResult bindingResult, Model model) { //TODO VALUTARE SE USARE PARAMETRO ID
         Listing old = listingService.findById(listing.getId());
         if (!old.getTeacher().getId().equals(userService.getCurrentUser().getId())) {//VERIFICO CHE SIA IL PROPIETARIO
             return "redirect:/teacher/myListings";
@@ -132,7 +132,7 @@ public class ListingController {
     }
 
     @PostMapping("/teacher/removeAvailabilityFromListing/{availability_id}/{listing_id}")
-    public String removeAvailabilityFromListing(@ModelAttribute("listing") Listing temporaryListing,@PathVariable("availability_id") Long availabilityId, @PathVariable("listing_id") Long listingId, Model model) {
+    public String removeAvailabilityFromListing(@ModelAttribute("listing") Listing temporaryListing, @PathVariable("availability_id") Long availabilityId, @PathVariable("listing_id") Long listingId, Model model) {
         Listing actual = listingService.findByIdWithAvailability(listingId);
         if (!actual.getTeacher().getId().equals(userService.getCurrentUser().getId())) { //NON CONTROLLO CHE LA DISPONIBILITA' SIA RELATIVA ALL'ANNUNCIO PERCHE' PER COME E' STRUTTURATA LA QUERY NON E' UN PROBLEMA(NON VIENE CANCELLATO NULLA)
             return "redirect:/teacher/myListings";
@@ -141,7 +141,7 @@ public class ListingController {
             model.addAttribute("removeError", "Non puoi eliminare una disponibilità con prenotazioni attive.");
         } else {
             listingService.removeAvailabilityFromListing(availabilityId, listingId); //RITORNA L'OGGETTO RIMOSSO
-             actual = listingService.findByIdWithAvailability(listingId); //AGGIORNO DATI PASSATI ALLA VIEW
+            actual = listingService.findByIdWithAvailability(listingId); //AGGIORNO DATI PASSATI ALLA VIEW
 
         }
         copyTemporaryListing(temporaryListing, actual);
@@ -154,13 +154,13 @@ public class ListingController {
     @GetMapping("/teacher/removeListing/{id}")
     public String removeListing(@PathVariable("id") Long id, RedirectAttributes redirectAttributes, Model model) {
         Listing temporaryListing = listingService.findByIdWithAvailability(id);
-        if(!temporaryListing.getTeacher().getId().equals(userService.getCurrentUser().getId())) {
+        if (!temporaryListing.getTeacher().getId().equals(userService.getCurrentUser().getId())) {
             return "redirect:/teacher/myListings";
         }
-        if(bookingService.listingHasActiveBookings(id)){
+        if (bookingService.listingHasActiveBookings(id)) {
             redirectAttributes.addFlashAttribute("errorMessage",
                     "Non è possibile eliminare un annuncio che ha prenotazioni attive"); //Uso RredirectAttributes cosi il messaggio non si perde nel redirect
-        }else {
+        } else {
             listingService.removeListing(id);
             redirectAttributes.addFlashAttribute("successMessage",
                     "Annuncio eliminato con successo"); //Uso RredirectAttributes cosi il messaggio non si perde nel redirect

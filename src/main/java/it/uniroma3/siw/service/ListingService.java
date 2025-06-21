@@ -6,6 +6,9 @@ import it.uniroma3.siw.model.Subject;
 import it.uniroma3.siw.repository.ListingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 @Service
 public class ListingService {
@@ -45,12 +48,14 @@ public class ListingService {
     public void removeAvailabilityFromListing(Long availabilityId, Long listingId) {
          listingRepository.removeAvailabilityFromListing(availabilityId, listingId);
     }
+    public Iterable<Listing> findByCriteria(LocalDate day, LocalTime startTime, LocalTime endTime) {
+        return listingRepository.findByCriteria(day,startTime,endTime);
+    }
     public void removeListing(Long listingId) {
         listingRepository.deleteById(listingId);
     }
     public Iterable<Listing> findBySubject(Subject subject) {return listingRepository.findBySubject(subject);}
     public Long countBySubject(Subject subject) {return listingRepository.countBySubject(subject);}
-    public Iterable<Listing> findByAvailabilities(Availability availability) {return listingRepository.findByAvailability(availability);}
     public List<Listing> findByAvailabilitiesIn(List<Availability> availabilities) {return listingRepository.findByAvailabilitiesIn(availabilities);}
     public Iterable<Listing> findBySubjectWithAvailabilities(Long subjectId) {return listingRepository.findBySubjectIdWithAvailabilities(subjectId);}
 }
