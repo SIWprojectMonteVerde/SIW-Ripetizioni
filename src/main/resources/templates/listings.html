@@ -16,9 +16,8 @@
 <main class="container">
 
   <section class="search_zone">
-    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere},sortBy=${param.sortBy != null ? param.sortBy : 'DATE_DESC'})"></div>
+    <div th:replace="fragments/advancedSearh :: searchBar(genere=${genere},sortBy=${param.sortBy ?: 'DATE_DESC'})"></div>
   </section>
-
   <section class="annunci">
     <h2>Annunci disponibili</h2>
     <div class="card-grid">
