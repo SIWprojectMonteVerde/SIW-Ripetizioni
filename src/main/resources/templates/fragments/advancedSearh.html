@@ -13,7 +13,7 @@
          <input type="text"
                        name="searchTerm"
                        class="form-control search-input"
-                       placeholder="Cerca per subject o teacher..."
+                       placeholder="Cerca annunci per insegnante..."
                        th:value="${param.searchTerm}" />
 
                 <button class="search-btn" type="submit">
@@ -59,14 +59,6 @@
                                    th:value="${param.endTime}" placeholder="Ora fine">
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6 mb-2">
-                    <label class="form-label">Ordina per</label>
-                    <select class="form-select sort-select" name="sortBy">
-                        <option value="DATE_DESC">Data</option>
-                        <option value="RATING">Valutazione</option>
-                        <option value="TITLE">Titolo (A-Z)</option>
-                    </select>
                 </div>
             </div>
         </form>

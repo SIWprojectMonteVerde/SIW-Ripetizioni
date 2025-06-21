@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
 <li th:fragment="user-dropdown(user)" class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="profiloDropdown" role="button"
        data-bs-toggle="dropdown" aria-expanded="false" th:text="${user != null ? user.email : 'Guest'}"></a>
@@ -8,7 +12,11 @@
             </h6>
         </li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" th:href="@{/myProfile/changePassword}">Cambia password</a></li>
+
+        <li><a class="dropdown-item" sec:authorize="hasAuthority('STUDENT')" th:href="@{/student/myProfile}">Il Mio Profilo</a></li> <!--PER STUDENTI-->
+        <li><a class="dropdown-item" sec:authorize="hasAuthority('TEACHER')" th:href="@{/teacher/myProfile}">Il Mio Profilo</a></li> <!--PER INSEGNATNTI-->
         <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
     </ul>
 </li>
+</body>
+</html>

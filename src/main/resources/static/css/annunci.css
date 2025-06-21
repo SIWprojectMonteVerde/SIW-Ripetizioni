@@ -66,8 +66,7 @@ header {
     font-weight: 600;
 }
 
-.annunci h2 {
-    font-size: 1.6rem;
+.annunci h1 {
     margin-bottom: 1.5rem;
     text-align: center;
 }
@@ -128,4 +127,28 @@ footer {
 .search_zone{
     margin: 100px;
     padding: 20px;
+}
+
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+.info .price {
+    font-weight: bold;
+    color: #007bff;
 }

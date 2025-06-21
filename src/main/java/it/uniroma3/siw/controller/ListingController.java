@@ -10,6 +10,7 @@ import it.uniroma3.siw.service.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,15 +47,12 @@ public class ListingController {
 
     //VISUALIZZAZIONE ANNUNCI
     @GetMapping("/listings")
-    public String showListings(@RequestParam(name = "subj") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    public String showListings(@RequestParam(name = "subj",required = false) Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
-                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, Model model) {
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime,@RequestParam(required = false, defaultValue = "DATA_DESC") String sortBy ,Model model) {
 
+        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId); //TODO filtro per teacher
 
-
-        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId);
-
-        Iterable<Listing> listings = listingService.findAll(); //sostituire con get all
 
         model.addAttribute("listings", listings);
 
@@ -196,6 +194,14 @@ public class ListingController {
             ));
         }
         return result;
+    }
+    private String buildSort(String sortBy) {
+        return switch(sortBy) {
+            case "TITLE" -> "l.title";
+            case "DATE_DESC" -> "l.release_date DESC";
+            case "DATE_ASC" -> "l.release_date ASC";
+            default -> "l.release_date DESC";
+        };
     }
 
 
