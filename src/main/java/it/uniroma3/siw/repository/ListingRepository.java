@@ -1,6 +1,5 @@
 package it.uniroma3.siw.repository;
 
-import it.uniroma3.siw.model.Availability;
 import it.uniroma3.siw.model.Listing;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,6 +30,6 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 	@Query(nativeQuery=true, value = "DELETE FROM availability a where a.id= :availability_id and a.listing_id = :listing_id")
 	public void removeAvailabilityFromListing(@Param("availability_id") Long availabilityId, @Param("listing_id") Long listingId);
 
-
-	Iterable<Listing> findByAvailability(Availability availability);
+	@Query("SELECT l FROM Listing l LEFT JOIN FETCH l.availabilities WHERE l.subject.id = :subject_id")
+	Iterable<Listing> findBySubjectIdWithAvailabilities( @Param("subject_id")Long subjectId);
 }
