@@ -51,9 +51,10 @@ public class ListingController {
                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, Model model) {
 
 
+
         Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId);
 
-        listings = listingService.findAllWithAvailabilities();
+        Iterable<Listing> listings = listingService.findAll(); //sostituire con get all
 
         model.addAttribute("listings", listings);
 
