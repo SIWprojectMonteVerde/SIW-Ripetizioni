@@ -48,8 +48,8 @@ public class ListingService {
     public void removeAvailabilityFromListing(Long availabilityId, Long listingId) {
          listingRepository.removeAvailabilityFromListing(availabilityId, listingId);
     }
-    public Iterable<Listing> findByCriteria(LocalDate day, LocalTime startTime, LocalTime endTime) {
-        return listingRepository.findByCriteria(day,startTime,endTime);
+    public Iterable<Listing> findByCriteria(LocalDate day, LocalTime startTime, LocalTime endTime,Long subjectId) {
+        return listingRepository.findByCriteria(day,startTime,endTime,subjectId);
     }
     public void removeListing(Long listingId) {
         listingRepository.deleteById(listingId);
