@@ -21,4 +21,7 @@ public interface AvailabilityRepository extends CrudRepository<Availability, Lon
 	List<Availability> findByIdAndNoBookings(Long id);
 
     Iterable<Availability> findByDate(LocalDate day);
+
+	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.date= :day and a.start_time>= :start_time and a.end_time<= :end_time")
+	public List<Availability> findByDateAndTimeRangeWithin(@Param("day") LocalDate day, @Param("start_time") LocalDate startTime, @Param("end_time") LocalDate endTime);
 }

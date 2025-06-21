@@ -32,14 +32,7 @@ public class AvaialabiltyService {
     public Iterable<Availability> findByDate(LocalDate Day) {
         return availabilityRepository.findByDate(Day);
     }
-    public Iterable<Availability> findHourRange(LocalDate Day,LocalDate startHour, LocalDate endHour) {
-        Iterable<Availability> all=this.findByDate(Day);
-        List<Availability> filtered = new ArrayList<>();
-        for(Availability a:all){
-            if (!a.getStartTime().isBefore(LocalTime.from(startHour)) && !a.getEndTime().isAfter(LocalTime.from(endHour))) {
-                filtered.add(a);
-            }
-        }
-        return filtered;
+    public List<Availability> findByDateAndTimeRangeWithin(LocalDate Day,LocalDate startHour, LocalDate endHour) {
+        return availabilityRepository.findByDateAndTimeRangeWithin(Day,startHour,endHour);
     }
 }
