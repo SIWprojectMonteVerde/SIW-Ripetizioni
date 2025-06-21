@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,13 +33,13 @@ class FilterController {
     @Autowired
     private AvaialabiltyService availabilityService;
 
-    @GetMapping("/listings")
+    @GetMapping("/listings/filter")
     public String filterListings(
             @RequestParam(name = "subj", defaultValue = "-1") Long MateriaID,
             @RequestParam(required = false) String searchTerm,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate Day,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate StartHour,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate EndHour,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalTime StartHour,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalTime EndHour,
             @RequestParam(defaultValue = "DATE_DESC") String sortBy,
             Model model
     ) {

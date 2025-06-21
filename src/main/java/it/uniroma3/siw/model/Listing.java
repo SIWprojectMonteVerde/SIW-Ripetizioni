@@ -24,7 +24,7 @@ public class Listing {
 	private Teacher teacher;
 
 	@Valid //PER FAR SI CHE VENGA VALIDATO OGNI SINGOLO ELEMENTO DELLA LISTA
-	@OneToMany(mappedBy = "listing",cascade = {CascadeType.ALL})
+	@OneToMany(mappedBy = "listing",fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	private List<Availability> availabilities = new ArrayList<>();
 	@ManyToOne
 	private Subject subject;

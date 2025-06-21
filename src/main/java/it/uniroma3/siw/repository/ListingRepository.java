@@ -10,6 +10,8 @@ import it.uniroma3.siw.model.Subject;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 	public void removeAvailabilityFromListing(@Param("availability_id") Long availabilityId, @Param("listing_id") Long listingId);
 
 
-	Iterable<Listing> findByAvailability(Availability availability);
+
 
 	@Query("""
     SELECT DISTINCT l FROM Listing l
@@ -44,4 +46,15 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 
 	@Query("SELECT l FROM Listing l LEFT JOIN FETCH l.availabilities WHERE l.subject.id = :subject_id")
 	Iterable<Listing> findBySubjectIdWithAvailabilities( @Param("subject_id")Long subjectId);
+
+
+	@Query(nativeQuery = true, value =
+			"SELECT * FROM listing l WHERE l.id IN (" +
+					" SELECT a.listing_id FROM availability a " +
+					" WHERE (:day IS NULL OR a.date = :day) " +
+					" AND (:start_time IS NULL OR a.start_time >= :start_time) " +
+					" AND (:end_time IS NULL OR a.end_time <= :end_time)" +
+					")")
+	Iterable<Listing> findByCriteria(@Param("day") LocalDate day, @Param("start_time") LocalTime startTime, @Param("end_time") LocalTime endTime);
+
 }

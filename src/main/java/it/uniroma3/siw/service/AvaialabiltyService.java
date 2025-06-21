@@ -32,7 +32,7 @@ public class AvaialabiltyService {
     public Iterable<Availability> findByDate(LocalDate Day) {
         return availabilityRepository.findByDate(Day);
     }
-    public List<Availability> findByDateAndTimeRangeWithin(LocalDate Day,LocalDate startHour, LocalDate endHour) {
+    public List<Availability> findByDateAndTimeRangeWithin(LocalDate Day,LocalTime startHour, LocalTime endHour) {
         return availabilityRepository.findByDateAndTimeRangeWithin(Day,startHour,endHour);
     }
 }
