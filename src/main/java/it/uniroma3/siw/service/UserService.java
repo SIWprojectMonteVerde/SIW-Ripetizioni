@@ -43,4 +43,9 @@ public class UserService {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return credentialsService.getCredentialsByUsername(userDetails.getUsername());
     }
+    public void updateUserPicture(User user) {
+        User userToUpdate = this.getUserById(user.getId());
+        userToUpdate.setPicture(user.getPicture());
+        userRepository.save(userToUpdate);
+    }
 }

@@ -1,17 +1,12 @@
 package it.uniroma3.siw.controller;
 
 import it.uniroma3.siw.controller.validator.AvailabilityListValidator;
-import it.uniroma3.siw.model.Availability;
+import it.uniroma3.siw.model.*;
 import it.uniroma3.siw.model.Dto.MateriaDto;
-import it.uniroma3.siw.model.Listing;
-import it.uniroma3.siw.model.Subject;
-import it.uniroma3.siw.model.Teacher;
 import it.uniroma3.siw.service.*;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +18,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class ListingController {
@@ -46,16 +40,10 @@ public class ListingController {
 
     //VISUALIZZAZIONE ANNUNCI
     @GetMapping("/listings")
-    public String showListings(@RequestParam(name = "subj") Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    public String showListings(@RequestParam(name = "subj",required = false) Long subjectId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
-                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, Model model) {
-
-
-
-        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId);
-
-        Iterable<Listing> listings = listingService.findAll(); //sostituire con get all
-
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime endTime, @RequestParam(required = false) String teacherName , Model model) {
+        Iterable<Listing> listings = listingService.findByCriteria(date, startTime, endTime, subjectId,teacherName); //TODO filtro per teacher
         model.addAttribute("listings", listings);
 
         model.addAttribute("genere", buildGenreList(subjectId));
@@ -64,9 +52,18 @@ public class ListingController {
 
     @GetMapping("/listings/{id}")
     public String showListing(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("listing", listingService.findById(id));
-        model.addAttribute("availabilities", availabilityService.findByListingIdAndNoBookings(id));
+        User currentUser = userService.getCurrentUser();
+        Listing selectedListing = listingService.findById(id);
+        if (currentUser != null && selectedListing!=null && selectedListing.getTeacher().getId().equals(currentUser.getId())) {
+            //L'utente corrente è il proprietario dell'annuncio mostro anche disponibilità prenotate
 
+            model.addAttribute("bookedAvailabilities", availabilityService.findBookedAvailabilitiesFuture(id));
+            model.addAttribute("pastBookedAvailabilities", availabilityService.findBookedAvailabilitiesPast(id));
+        }
+
+        model.addAttribute("listing", listingService.findById(id));
+        model.addAttribute("availabilities", availabilityService.findByListingIdAndNoBookingsFuture(id));
+        //TODO FARE IN MODO CHE L'INSEGNANTE TITOLARE VEDA ANCHE LE DISPONIBILTA' GIA' PRENOTATE
         //model.addAttribute("listing", listingService.findByIdWithAvailability(id)); //USO PER CARICARE TUTTE LE DISPONIBILTA' ALTTRIMENTI ESSSENDO DI DEFAULT LAZY DAREBBE PROBLEMI
         return "listing";
     }
@@ -196,6 +193,14 @@ public class ListingController {
             ));
         }
         return result;
+    }
+    private String buildSort(String sortBy) {
+        return switch(sortBy) {
+            case "TITLE" -> "l.title";
+            case "DATE_DESC" -> "l.release_date DESC";
+            case "DATE_ASC" -> "l.release_date ASC";
+            default -> "l.release_date DESC";
+        };
     }
 
 

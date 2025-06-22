@@ -31,7 +31,7 @@ public class BookingController {
             booking.setStudent((Student) userService.getCurrentUser());//CAST POSSIBILE PERCHE' L'URL è protetto
             booking.setDisponibilita(availability);
             availability.getBookings().add(booking);
-            avaialabiltyService.save(availability);
+            avaialabiltyService.save(availability); //TODO CAPIRE COME GESTIRE PRENOTAZIONI PER DATE PASSATE
             return "redirect:/student/myBookings";
         }
         return "redirect:/listings/" + availability.getListing().getId();

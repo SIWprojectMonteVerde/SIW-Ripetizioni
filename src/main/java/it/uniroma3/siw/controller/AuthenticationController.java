@@ -11,6 +11,7 @@ import it.uniroma3.siw.controller.validator.UserValidator;
 import it.uniroma3.siw.model.*;
 import it.uniroma3.siw.service.BookingService;
 import it.uniroma3.siw.service.CredentialsService;
+import it.uniroma3.siw.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -43,6 +44,9 @@ public class AuthenticationController {
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private UserService userService;
 
     //VALIDATOR
     @Autowired
