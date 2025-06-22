@@ -18,8 +18,17 @@ public interface AvailabilityRepository extends CrudRepository<Availability, Lon
 	@Query("SELECT a FROM Availability a LEFT JOIN FETCH a.bookings WHERE a.id = :id")
 	public Optional<Availability> findByIdWithBookings(@Param("id") Long id);
 
-	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.id NOT IN (select b.availability_id FROM booking b) and a.listing_id= :id")
-	List<Availability> findByIdAndNoBookings(Long id);
+	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.id NOT IN (select b.availability_id FROM booking b) and a.listing_id= :id " +
+			"AND (a.date + a.start_time) >= NOW()") //SOLO DISPONIBILITA' NON PASSATE
+	List<Availability> findByIdAndNoBookingsFuture(Long id);
+
+	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.id IN (select b.availability_id FROM booking b) and a.listing_id= :id " +
+			"AND (a.date + a.start_time) >= NOW()")
+	List<Availability> findByIdAndBookedFuture(Long id);
+
+	@Query(nativeQuery = true,value = "SELECT * FROM availability a where a.id IN (select b.availability_id FROM booking b) and a.listing_id= :id " +
+			"AND (a.date + a.start_time) < NOW()")
+	List<Availability> findByIdAndBookedPast(Long id);
 
     Iterable<Availability> findByDate(LocalDate day);
 

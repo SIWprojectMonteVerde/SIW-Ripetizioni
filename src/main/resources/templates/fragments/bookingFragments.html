@@ -45,7 +45,7 @@
     <div class="d-flex overflow-auto pb-3 horizontal-cards">
       <div th:each="booking : ${bookings}" class="flex-shrink-0">
         <div class="card shadow-sm position-relative card-horizontal" >
-          <div class="card-body">
+          <a  th:href="@{'/listings/'+${booking.availability.listing.id}}"  class="text-reset text-decoration-none"><div class="card-body">
             <!-- Pulsante di cancellazione in alto a destra -->
             <a th:if="${role}=='student'" class="btn btn-outline-danger delete-btn position-absolute top-0 end-0 m-2"
 
@@ -56,7 +56,7 @@
             <!-- Pill con nome materia -->
             <span class="badge bg-primary rounded-pill mb-2" th:text="${booking.availability.listing.subject.name}">Materia</span>
 
-            <h5 class="card-title pe-5" th:text="${booking.availability.listing.title}">Titolo annuncio</h5>
+          <h5 class="card-title pe-5" th:text="${booking.availability.listing.title}">Titolo annuncio</h5>
             <p class="card-text">
               <strong th:if="${role}=='student'" >Docente:</strong>
               <strong th:if="${role}=='teacher'" >Studente:</strong>
@@ -65,7 +65,7 @@
               <strong>Data:</strong>
               <span th:text="${#temporals.format(booking.availability.date, 'dd/MM/yyyy') + ' (' + #temporals.format(booking.availability.startTime, 'HH:mm') + '-' + #temporals.format(booking.availability.endTime, 'HH:mm') + ')'}">01/01/2024 (10:00-11:00)</span><br>
             </p>
-          </div>
+          </div></a>
         </div>
       </div>
     </div>

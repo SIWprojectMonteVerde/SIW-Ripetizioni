@@ -43,7 +43,7 @@
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col">
-                    <h2 class="card-title" th:text="${listing.title}">Titolo</h2>
+                   <a th:href="@{'/listings/'+${listing.id}}"><h2  class="card-title" th:text="${listing.title}">Titolo</h2></a>
                     <p class="card-text text-muted" th:if="${listing.description}"
                        th:text="${#strings.abbreviate(listing.description, 150)}">
                         Descrizione breve dell'annuncio...

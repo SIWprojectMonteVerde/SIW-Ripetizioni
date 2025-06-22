@@ -25,9 +25,8 @@
         <div class="card-header">
           <div class="avatar">
             <img th:src="@{'/user/' + ${listing.teacher.id} + '/photo'}"
-                 src="/images/avatar-placeholder.png"
                  alt="Avatar"
-                 onerror="this.src='/images/avatar-placeholder.png';">
+                 onerror="this.src='/images/teacher_avatar.jpg';">
           </div>
           <strong th:text="'Prof. ' + ${listing.teacher.lastName}"></strong>
         </div>

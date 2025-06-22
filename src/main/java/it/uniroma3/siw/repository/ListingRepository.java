@@ -51,7 +51,11 @@ public interface ListingRepository extends CrudRepository<Listing, Long> {
 	@Query(nativeQuery = true, value =
 			"SELECT * FROM listing l  WHERE ("
 					+"l.id IN (SELECT a.listing_id FROM availability a  WHERE (COALESCE(:day, a.date) = a.date) AND (COALESCE(:start_time, a.start_time) <= a.start_time) AND (COALESCE(:end_time, a.end_time) >= a.end_time))" + //FILTRO TEMPO
-					"AND (COALESCE(:subject_id,l.subject_id)= l.subject_id)) ORDER BY l.title") //FILTRO  MATERIA
-	Iterable<Listing> findByCriteria(@Param("day") LocalDate day, @Param("start_time") LocalTime startTime, @Param("end_time") LocalTime endTime,@Param("subject_id")Long subjectId);
+					"AND (COALESCE(:subject_id,l.subject_id)= l.subject_id)" + //FILTRO PER MATERIA
+					"AND ( l.teacher_id IN (SELECT t.id FROM users t WHERE t.user_type='TEACHER' " + //SELEZIONO SOLO USER DI TIPO TEACHER
+					"AND (    :teacher_name IS NULL OR" + // SE NOME NULL SKIPPO
+					"    LOWER(CONCAT(t.first_name, ' ', t.last_name)) LIKE LOWER(CONCAT(:teacher_name, '%')) OR" + // CERCO NOME COGNOME
+					"    LOWER(CONCAT(t.last_name, ' ', t.first_name)) LIKE LOWER(CONCAT(:teacher_name, '%'))) ))) ORDER BY l.title") //CERCO COGNOME NOME
+	Iterable<Listing> findByCriteria(@Param("day") LocalDate day, @Param("start_time") LocalTime startTime, @Param("end_time") LocalTime endTime,@Param("subject_id")Long subjectId,@Param("teacher_name")String teacherName);
 
 }
