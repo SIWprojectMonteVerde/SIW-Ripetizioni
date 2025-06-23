@@ -52,8 +52,8 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F9ABF0EFC3AE431DA2AEAB7616881666 }}
       - name: Set environment variables in Azure App Service
         run: |
-          az webapp config appsettings set --name SIWBooks \
-            --resource-group SIW \
+          az webapp config appsettings set --name SIWRipetizioni \
+            --resource-group SIWRipetizioni_group \
             --settings \
               DB_HOST=${{ secrets.DB_HOST }} \
               DB_USERNAME=${{ secrets.DB_USERNAME }} \
